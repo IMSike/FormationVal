@@ -6,3 +6,17 @@
 
 #IncludeRegexTransform: 
 
+../headers/my_printf.h
+stdarg.h
+-
+
+/home/aurelien/project/my_printf/src/my_printf.c
+stdarg.h
+-
+unistd.h
+-
+string.h
+-
+my_printf.h
+/home/aurelien/project/my_printf/src/my_printf.h
+

@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <string.h>
+#include "my_printf.h"
 
 void	my_putchar(char caractere)
 {
@@ -45,10 +46,10 @@ void init(map_fct *ma_map)
 {
 	ptrFonction mes_fonctions[] = {&binaire, &entier};
 	char mes_clefs[] = {'b', 'd'};
-	for(int inc = 0; inc < sizeof(mes_fonctions); ++i)
+	for(int inc = 0; inc < sizeof(mes_fonctions); ++inc)
 	{
-		(ma_map + inc).key = mes_clefs[inc];
-		(ma_map + inc).fonc = mes_fonctions[inc];
+		(ma_map + inc)->key = mes_clefs[inc];
+		(ma_map + inc)->fonc = mes_fonctions[inc];
 	}
 }
 
@@ -81,14 +82,14 @@ int 	printf_option(const char *str, va_list args, ...)
 	int i, retour;
 	i = retour = 0;
 	map_fct m;
-	init(m);
+	init(&m);
 
 	for(i = 0; str[i] < strlen(str); ++i)
 	{
 		if(str[i]=='%')
 		{
 			++i;
-			call(m,str[i],i, retour, args);
+			call(&m,str[i],i, retour, args);
 		}
 		else
 		{
