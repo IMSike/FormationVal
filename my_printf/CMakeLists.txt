@@ -6,4 +6,4 @@ set(	SRCS
 set(	HEADERS
 	headers/my_printf.h)
 add_executable(my_printf ${SRCS} ${HEADERS})
-target_include_directories(my_printf PUBLIC)
+target_include_directories(my_printf PUBLIC headers)

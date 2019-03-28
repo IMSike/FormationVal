@@ -41,14 +41,61 @@ int	convert_base(int nb, int base)
 	return retour;
 }
 
+void init(map_fct *ma_map)
+{
+	ptrFonction mes_fonctions[] = {&binaire, &entier};
+	char mes_clefs[] = {'b', 'd'};
+	for(int inc = 0; inc < sizeof(mes_fonctions); ++i)
+	{
+		(ma_map + inc).key = mes_clefs[inc];
+		(ma_map + inc).fonc = mes_fonctions[inc];
+	}
+}
+
+int call(map_fct *ma_map, char c, int* inc, int* retour, va_list args)
+{
+	for(int i = 0; i < sizeof(ma_map); ++i)
+	{
+		if((ma_map + i)->key == c)
+			(ma_map + i)->fonc(inc, retour, args);
+	}
+}
+
+void 	binaire(int* inc, int* retour, va_list args)
+{
+	int entier = va_arg(args, int);
+	retour += convert_base(entier, 2);
+	++inc;
+}
+
+void 	entier(int* inc, int* retour, va_list args)
+{
+	int entier = va_arg(args, int);
+	retour += convert_base(entier, 10);
+	++inc;
+}
+
 
 int 	printf_option(const char *str, va_list args, ...)
 {
 	int i, retour;
 	i = retour = 0;
+	map_fct m;
+	init(m);
 
-	for(i = 0; str[i] !=  '\0'; ++i)
+	for(i = 0; str[i] < strlen(str); ++i)
 	{
+		if(str[i]=='%')
+		{
+			++i;
+			call(m,str[i],i, retour, args);
+		}
+		else
+		{
+			my_putchar(str[i]);
+		        ++retour;
+		}
+		/*
 	        switch(str[i])
 	        {
 	        case '%':
@@ -134,7 +181,7 @@ int 	printf_option(const char *str, va_list args, ...)
 		        my_putchar(str[i]);
 		        ++retour;
 	        break;
-	        }
+	        }*/
 	}
 	return retour;
 }
