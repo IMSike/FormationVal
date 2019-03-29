@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMyLib.a  CMakeFiles/MyLib.dir/tests/main.c.o CMakeFiles/MyLib.dir/src/my_printf.c.o CMakeFiles/MyLib.dir/src/my_printf_options.c.o CMakeFiles/MyLib.dir/src/my_printf_handling.c.o
+/usr/bin/ranlib libMyLib.a

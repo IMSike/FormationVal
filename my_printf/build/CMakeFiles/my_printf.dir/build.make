@@ -57,18 +57,18 @@ include CMakeFiles/my_printf.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/my_printf.dir/flags.make
 
-CMakeFiles/my_printf.dir/src/main.c.o: CMakeFiles/my_printf.dir/flags.make
-CMakeFiles/my_printf.dir/src/main.c.o: ../src/main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aurelien/project/my_printf/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/my_printf.dir/src/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/my_printf.dir/src/main.c.o   -c /home/aurelien/project/my_printf/src/main.c
+CMakeFiles/my_printf.dir/tests/main.c.o: CMakeFiles/my_printf.dir/flags.make
+CMakeFiles/my_printf.dir/tests/main.c.o: ../tests/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/aurelien/project/my_printf/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/my_printf.dir/tests/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/my_printf.dir/tests/main.c.o   -c /home/aurelien/project/my_printf/tests/main.c
 
-CMakeFiles/my_printf.dir/src/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/my_printf.dir/src/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/aurelien/project/my_printf/src/main.c > CMakeFiles/my_printf.dir/src/main.c.i
+CMakeFiles/my_printf.dir/tests/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/my_printf.dir/tests/main.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/aurelien/project/my_printf/tests/main.c > CMakeFiles/my_printf.dir/tests/main.c.i
 
-CMakeFiles/my_printf.dir/src/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/my_printf.dir/src/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/aurelien/project/my_printf/src/main.c -o CMakeFiles/my_printf.dir/src/main.c.s
+CMakeFiles/my_printf.dir/tests/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/my_printf.dir/tests/main.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/aurelien/project/my_printf/tests/main.c -o CMakeFiles/my_printf.dir/tests/main.c.s
 
 CMakeFiles/my_printf.dir/src/my_printf.c.o: CMakeFiles/my_printf.dir/flags.make
 CMakeFiles/my_printf.dir/src/my_printf.c.o: ../src/my_printf.c
@@ -111,7 +111,7 @@ CMakeFiles/my_printf.dir/src/my_printf_handling.c.s: cmake_force
 
 # Object files for target my_printf
 my_printf_OBJECTS = \
-"CMakeFiles/my_printf.dir/src/main.c.o" \
+"CMakeFiles/my_printf.dir/tests/main.c.o" \
 "CMakeFiles/my_printf.dir/src/my_printf.c.o" \
 "CMakeFiles/my_printf.dir/src/my_printf_options.c.o" \
 "CMakeFiles/my_printf.dir/src/my_printf_handling.c.o"
@@ -119,7 +119,7 @@ my_printf_OBJECTS = \
 # External object files for target my_printf
 my_printf_EXTERNAL_OBJECTS =
 
-my_printf: CMakeFiles/my_printf.dir/src/main.c.o
+my_printf: CMakeFiles/my_printf.dir/tests/main.c.o
 my_printf: CMakeFiles/my_printf.dir/src/my_printf.c.o
 my_printf: CMakeFiles/my_printf.dir/src/my_printf_options.c.o
 my_printf: CMakeFiles/my_printf.dir/src/my_printf_handling.c.o

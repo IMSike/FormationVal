@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/aurelien/project/my_printf/src/main.c" "/home/aurelien/project/my_printf/build/CMakeFiles/my_printf.dir/src/main.c.o"
   "/home/aurelien/project/my_printf/src/my_printf.c" "/home/aurelien/project/my_printf/build/CMakeFiles/my_printf.dir/src/my_printf.c.o"
   "/home/aurelien/project/my_printf/src/my_printf_handling.c" "/home/aurelien/project/my_printf/build/CMakeFiles/my_printf.dir/src/my_printf_handling.c.o"
   "/home/aurelien/project/my_printf/src/my_printf_options.c" "/home/aurelien/project/my_printf/build/CMakeFiles/my_printf.dir/src/my_printf_options.c.o"
+  "/home/aurelien/project/my_printf/tests/main.c" "/home/aurelien/project/my_printf/build/CMakeFiles/my_printf.dir/tests/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

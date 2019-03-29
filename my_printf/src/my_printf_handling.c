@@ -38,7 +38,7 @@ int	convert_base(int nb, int base)
 
 void 	init(map_fct *ma_map)
 {
-	ptrFonction mes_fonctions[NB_OPTIONS_PRINTF] = {&binaire, &entier, &entierOctal, &entierNonSigne, &caractere, &entierHexa, &chaineDeCaracteres, &caracterePourcent};
+	ptrFonctionOnOptionsOfMyPrintf mes_fonctions[NB_OPTIONS_PRINTF] = {&binary, &integer, &octalInteger, &unsignedInteger, &character, &hexaInteger, &string, &percentCharacter};
 	char mes_clefs[NB_OPTIONS_PRINTF] = {'b', 'd', 'o', 'u', 'c', 'X', 's', '%'};
 	for(int inc = 0; inc < NB_OPTIONS_PRINTF; ++inc)
 	{
