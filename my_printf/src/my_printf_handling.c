@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "my_printf.h"
-#include "my_printf_options.h"
-#include "my_printf_handling.h"
+#include "../headers/my_printf.h"
+#include "../headers/my_printf_options.h"
+#include "../headers/my_printf_handling.h"
 
 int	convert_base(int nb, int base)
 {

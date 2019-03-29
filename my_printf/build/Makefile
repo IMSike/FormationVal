@@ -111,19 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named my_printf
-
-# Build rule for target.
-my_printf: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 my_printf
-.PHONY : my_printf
-
-# fast build rule for target.
-my_printf/fast:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/build
-.PHONY : my_printf/fast
-
-#=============================================================================
 # Target rules for targets named MyLib
 
 # Build rule for target.
@@ -136,14 +123,27 @@ MyLib/fast:
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/build
 .PHONY : MyLib/fast
 
+#=============================================================================
+# Target rules for targets named my_printf
+
+# Build rule for target.
+my_printf: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 my_printf
+.PHONY : my_printf
+
+# fast build rule for target.
+my_printf/fast:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/build
+.PHONY : my_printf/fast
+
 src/my_printf.o: src/my_printf.c.o
 
 .PHONY : src/my_printf.o
 
 # target to build an object file
 src/my_printf.c.o:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.o
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf.c.o
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.o
 .PHONY : src/my_printf.c.o
 
 src/my_printf.i: src/my_printf.c.i
@@ -152,8 +152,8 @@ src/my_printf.i: src/my_printf.c.i
 
 # target to preprocess a source file
 src/my_printf.c.i:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.i
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf.c.i
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.i
 .PHONY : src/my_printf.c.i
 
 src/my_printf.s: src/my_printf.c.s
@@ -162,8 +162,8 @@ src/my_printf.s: src/my_printf.c.s
 
 # target to generate assembly for a file
 src/my_printf.c.s:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.s
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf.c.s
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.s
 .PHONY : src/my_printf.c.s
 
 src/my_printf_handling.o: src/my_printf_handling.c.o
@@ -172,8 +172,8 @@ src/my_printf_handling.o: src/my_printf_handling.c.o
 
 # target to build an object file
 src/my_printf_handling.c.o:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.o
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_handling.c.o
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.o
 .PHONY : src/my_printf_handling.c.o
 
 src/my_printf_handling.i: src/my_printf_handling.c.i
@@ -182,8 +182,8 @@ src/my_printf_handling.i: src/my_printf_handling.c.i
 
 # target to preprocess a source file
 src/my_printf_handling.c.i:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.i
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_handling.c.i
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.i
 .PHONY : src/my_printf_handling.c.i
 
 src/my_printf_handling.s: src/my_printf_handling.c.s
@@ -192,8 +192,8 @@ src/my_printf_handling.s: src/my_printf_handling.c.s
 
 # target to generate assembly for a file
 src/my_printf_handling.c.s:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.s
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_handling.c.s
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.s
 .PHONY : src/my_printf_handling.c.s
 
 src/my_printf_options.o: src/my_printf_options.c.o
@@ -202,8 +202,8 @@ src/my_printf_options.o: src/my_printf_options.c.o
 
 # target to build an object file
 src/my_printf_options.c.o:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.o
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_options.c.o
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.o
 .PHONY : src/my_printf_options.c.o
 
 src/my_printf_options.i: src/my_printf_options.c.i
@@ -212,8 +212,8 @@ src/my_printf_options.i: src/my_printf_options.c.i
 
 # target to preprocess a source file
 src/my_printf_options.c.i:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.i
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_options.c.i
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.i
 .PHONY : src/my_printf_options.c.i
 
 src/my_printf_options.s: src/my_printf_options.c.s
@@ -222,8 +222,8 @@ src/my_printf_options.s: src/my_printf_options.c.s
 
 # target to generate assembly for a file
 src/my_printf_options.c.s:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.s
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/src/my_printf_options.c.s
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.s
 .PHONY : src/my_printf_options.c.s
 
 tests/main.o: tests/main.c.o
@@ -232,8 +232,8 @@ tests/main.o: tests/main.c.o
 
 # target to build an object file
 tests/main.c.o:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.o
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/tests/main.c.o
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.o
 .PHONY : tests/main.c.o
 
 tests/main.i: tests/main.c.i
@@ -242,8 +242,8 @@ tests/main.i: tests/main.c.i
 
 # target to preprocess a source file
 tests/main.c.i:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.i
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/tests/main.c.i
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.i
 .PHONY : tests/main.c.i
 
 tests/main.s: tests/main.c.s
@@ -252,8 +252,8 @@ tests/main.s: tests/main.c.s
 
 # target to generate assembly for a file
 tests/main.c.s:
-	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.s
 	$(MAKE) -f CMakeFiles/MyLib.dir/build.make CMakeFiles/MyLib.dir/tests/main.c.s
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/tests/main.c.s
 .PHONY : tests/main.c.s
 
 # Help Target
@@ -264,8 +264,8 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... my_printf"
 	@echo "... MyLib"
+	@echo "... my_printf"
 	@echo "... src/my_printf.o"
 	@echo "... src/my_printf.i"
 	@echo "... src/my_printf.s"
