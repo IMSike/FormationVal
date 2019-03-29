@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/my_printf.dir/src/main.c.o"
   "CMakeFiles/my_printf.dir/src/my_printf.c.o"
+  "CMakeFiles/my_printf.dir/src/my_printf_options.c.o"
+  "CMakeFiles/my_printf.dir/src/my_printf_handling.c.o"
   "my_printf.pdb"
   "my_printf"
 )

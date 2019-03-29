@@ -5,5 +5,17 @@ CMakeFiles/my_printf.dir/src/main.c.o: ../headers/my_printf.h
 CMakeFiles/my_printf.dir/src/main.c.o: ../src/main.c
 
 CMakeFiles/my_printf.dir/src/my_printf.c.o: ../headers/my_printf.h
+CMakeFiles/my_printf.dir/src/my_printf.c.o: ../headers/my_printf_handling.h
+CMakeFiles/my_printf.dir/src/my_printf.c.o: ../headers/my_printf_options.h
 CMakeFiles/my_printf.dir/src/my_printf.c.o: ../src/my_printf.c
+
+CMakeFiles/my_printf.dir/src/my_printf_handling.c.o: ../headers/my_printf.h
+CMakeFiles/my_printf.dir/src/my_printf_handling.c.o: ../headers/my_printf_handling.h
+CMakeFiles/my_printf.dir/src/my_printf_handling.c.o: ../headers/my_printf_options.h
+CMakeFiles/my_printf.dir/src/my_printf_handling.c.o: ../src/my_printf_handling.c
+
+CMakeFiles/my_printf.dir/src/my_printf_options.c.o: ../headers/my_printf.h
+CMakeFiles/my_printf.dir/src/my_printf_options.c.o: ../headers/my_printf_handling.h
+CMakeFiles/my_printf.dir/src/my_printf_options.c.o: ../headers/my_printf_options.h
+CMakeFiles/my_printf.dir/src/my_printf_options.c.o: ../src/my_printf_options.c
 

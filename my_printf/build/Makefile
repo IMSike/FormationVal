@@ -177,6 +177,60 @@ src/my_printf.c.s:
 	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf.c.s
 .PHONY : src/my_printf.c.s
 
+src/my_printf_handling.o: src/my_printf_handling.c.o
+
+.PHONY : src/my_printf_handling.o
+
+# target to build an object file
+src/my_printf_handling.c.o:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.o
+.PHONY : src/my_printf_handling.c.o
+
+src/my_printf_handling.i: src/my_printf_handling.c.i
+
+.PHONY : src/my_printf_handling.i
+
+# target to preprocess a source file
+src/my_printf_handling.c.i:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.i
+.PHONY : src/my_printf_handling.c.i
+
+src/my_printf_handling.s: src/my_printf_handling.c.s
+
+.PHONY : src/my_printf_handling.s
+
+# target to generate assembly for a file
+src/my_printf_handling.c.s:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_handling.c.s
+.PHONY : src/my_printf_handling.c.s
+
+src/my_printf_options.o: src/my_printf_options.c.o
+
+.PHONY : src/my_printf_options.o
+
+# target to build an object file
+src/my_printf_options.c.o:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.o
+.PHONY : src/my_printf_options.c.o
+
+src/my_printf_options.i: src/my_printf_options.c.i
+
+.PHONY : src/my_printf_options.i
+
+# target to preprocess a source file
+src/my_printf_options.c.i:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.i
+.PHONY : src/my_printf_options.c.i
+
+src/my_printf_options.s: src/my_printf_options.c.s
+
+.PHONY : src/my_printf_options.s
+
+# target to generate assembly for a file
+src/my_printf_options.c.s:
+	$(MAKE) -f CMakeFiles/my_printf.dir/build.make CMakeFiles/my_printf.dir/src/my_printf_options.c.s
+.PHONY : src/my_printf_options.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +246,12 @@ help:
 	@echo "... src/my_printf.o"
 	@echo "... src/my_printf.i"
 	@echo "... src/my_printf.s"
+	@echo "... src/my_printf_handling.o"
+	@echo "... src/my_printf_handling.i"
+	@echo "... src/my_printf_handling.s"
+	@echo "... src/my_printf_options.o"
+	@echo "... src/my_printf_options.i"
+	@echo "... src/my_printf_options.s"
 .PHONY : help
 
 
