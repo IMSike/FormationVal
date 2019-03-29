@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "my_printf.h"
 
 void	my_putchar(char caractere)
@@ -43,11 +44,10 @@ int	convert_base(int nb, int base)
 	return retour;
 }
 
-void init(map_fct *ma_map)
+void 	init(map_fct *ma_map)
 {
-	printf("testINIT");
-	ptrFonction mes_fonctions[NB_OPTIONS_PRINTF] = {&binaire, &entier};
-	char mes_clefs[NB_OPTIONS_PRINTF] = {'b', 'd'};
+	ptrFonction mes_fonctions[NB_OPTIONS_PRINTF] = {&binaire, &entier, &entierOctal, &entierNonSigne, &caractere, &entierHexa, &chaineDeCaracteres, &caracterePourcent};
+	char mes_clefs[NB_OPTIONS_PRINTF] = {'b', 'd', 'o', 'u', 'c', 'X', 's', '%'};
 	for(int inc = 0; inc < NB_OPTIONS_PRINTF; ++inc)
 	{
 		(ma_map + inc)->key = mes_clefs[inc];
@@ -55,9 +55,8 @@ void init(map_fct *ma_map)
 	}
 }
 
-int call(map_fct *ma_map, char c, int* inc, int* retour, va_list args)
+int 	call(map_fct *ma_map, char c, int* inc, int* retour, va_list args)
 {
-	printf("testCALL");
 	for(int i = 0; i < NB_OPTIONS_PRINTF; ++i)
 	{
 		if((ma_map + i)->key == c)
@@ -79,13 +78,59 @@ void 	entier(int* inc, int* retour, va_list args)
 	++inc;
 }
 
+void 	entierOctal(int* inc, int* retour, va_list args)
+{
+	int entier = va_arg(args, int);
+	my_putchar('0');
+	retour += convert_base(entier, 8) + 1;
+	++inc;
+}
+
+void 	entierNonSigne(int* inc, int* retour, va_list args)
+{
+	unsigned int entier = va_arg(args, unsigned int);
+	retour += convert_base(entier, 10);
+	++inc;
+}
+
+void 	caractere(int* inc, int* retour, va_list args)
+{
+	char c = (unsigned char) va_arg(args, int);
+	my_putchar(c);
+	++inc, ++retour;
+}
+
+void 	entierHexa(int* inc, int* retour, va_list args)
+{
+	int entier = va_arg(args, int);
+	my_putchar('0');
+	my_putchar('x');
+	retour += convert_base(entier, 16) + 2;
+	++inc;
+}
+
+void 	chaineDeCaracteres(int* inc, int* retour, va_list args)
+{
+	char *s = va_arg(args, char *);
+	for(; *s !=  '\0'; s++)
+	{
+		my_putchar(*s);
+		++retour;
+	}
+	++inc;
+}
+
+void 	caracterePourcent(int* inc, int* retour, va_list args)
+{
+	my_putchar('%');
+	++retour;
+}
 
 int 	printf_option(const char *str, va_list args, ...)
 {
-	printf("testPRINTF_OPTION");
 	int i, retour;
 	i = retour = 0;
-	map_fct *m;
+	map_fct *m = malloc(NB_OPTIONS_PRINTF * sizeof(map_fct));
 	init(m);
 
 	for(i = 0; i < strlen(str); ++i)
@@ -94,101 +139,16 @@ int 	printf_option(const char *str, va_list args, ...)
 		{
 			++i;
 			call(m,str[i],&i, &retour, args);
-			my_putchar(str[i]);
+			//my_putchar(str[i]);
 		}
 		else
 		{
 			my_putchar(str[i]);
 		        ++retour;
 		}
-		/*
-	        switch(str[i])
-	        {
-	        case '%':
-	        	++i;
-	            	switch(str[i])
-	            	{
-	            	case 'b':
-	            	{
-	                	int entier = va_arg(args, int);
-	                	retour += convert_base(entier, 2);
-	                	++i;
-	            	}
-	                break;
 
-	        	case 'o':
-	            	{
-		                int entier = va_arg(args, int);
-		                my_putchar('0');
-		                retour += convert_base(entier, 8) + 1;
-		                ++i;
-	            	}
-	                break;
-
-	            	case 'i':
-	            	case 'd':
-	            	{
-		                int entier = va_arg(args, int);
-		                retour += convert_base(entier, 10);
-		                ++i;
-	            	}
-	                break;
-
-		        case 'u':
-		        {
-		                unsigned int entier = va_arg(args, unsigned int);
-		                retour += convert_base(entier, 10);
-		                ++i;
-	            	}
-	                break;
-
-	            	case 'X':
-	            	{
-		                int entier = va_arg(args, int);
-		                my_putchar('0');
-		                my_putchar('x');
-		                retour += convert_base(entier, 16) + 2;
-		                ++i;
-	            	}
-	                break;
-
-	            	case 'c':
-	            	{
-		                char c = (unsigned char) va_arg(args, int);
-		                my_putchar(c);
-		                ++i, ++retour;
-	            	}
-	                break;
-
-	           	case 's':
-	            	{
-		                char *s = va_arg(args, char *);
-		                for(; *s !=  '\0'; s++)
-		                {
-		                	my_putchar(*s);
-		                    	++retour;
-		                }
-
-		                ++i;
-	            	}
-	                break;
-
-	            	case '%':
-		                my_putchar('%');
-		                ++retour;
-	                break;
-
-	            	default:
-		                my_putchar('%');
-		                ++retour;
-	                break;
-	            	}
-	        default:
-		        my_putchar(str[i]);
-		        ++retour;
-	        break;
-	        }*/
 	}
+	free(m);
 	return retour;
 }
 

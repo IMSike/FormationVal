@@ -1,7 +1,7 @@
 #ifndef MY_PRINTF_H_INCLUDED
 #define MY_PRINTF_H_INCLUDED
 
-#define NB_OPTIONS_PRINTF 2
+#define NB_OPTIONS_PRINTF 8
 
 #include <stdarg.h>
 
@@ -13,6 +13,12 @@ void 	my_putstr(char *str);
 
 void 	binaire(int* inc, int* retour, va_list args);
 void	entier(int* inc, int* retour, va_list args);
+void	entierOctal(int* inc, int* retour, va_list args);
+void	entierNonSigne(int* inc, int* retour, va_list args);
+void	caractere(int* inc, int* retour, va_list args);
+void	entierHexa(int* inc, int* retour, va_list args);
+void	chaineDeCaracteres(int* inc, int* retour, va_list args);
+void	caracterePourcent(int* inc, int* retour, va_list args);
 
 typedef void (*ptrFonction)(int*, int*, va_list);
 

@@ -10,15 +10,9 @@
 stdarg.h
 -
 
-/home/aurelien/project/my_printf/src/my_printf.c
-stdarg.h
--
-unistd.h
--
-string.h
--
-stdio.h
--
+/home/aurelien/project/my_printf/src/main.c
 my_printf.h
 /home/aurelien/project/my_printf/src/my_printf.h
+stdio.h
+-
 
