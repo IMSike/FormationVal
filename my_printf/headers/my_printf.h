@@ -1,6 +1,8 @@
 #ifndef MY_PRINTF_H_INCLUDED
 #define MY_PRINTF_H_INCLUDED
 
+#define NB_OPTIONS_PRINTF 2
+
 #include <stdarg.h>
 
 void 	my_putchar(const char caractere);

@@ -45,9 +45,10 @@ int	convert_base(int nb, int base)
 
 void init(map_fct *ma_map)
 {
-	ptrFonction mes_fonctions[] = {&binaire, &entier};
-	char mes_clefs[] = {'b', 'd'};
-	for(int inc = 0; inc < sizeof(mes_fonctions); ++inc)
+	printf("testINIT");
+	ptrFonction mes_fonctions[NB_OPTIONS_PRINTF] = {&binaire, &entier};
+	char mes_clefs[NB_OPTIONS_PRINTF] = {'b', 'd'};
+	for(int inc = 0; inc < NB_OPTIONS_PRINTF; ++inc)
 	{
 		(ma_map + inc)->key = mes_clefs[inc];
 		(ma_map + inc)->fonc = mes_fonctions[inc];
@@ -57,7 +58,7 @@ void init(map_fct *ma_map)
 int call(map_fct *ma_map, char c, int* inc, int* retour, va_list args)
 {
 	printf("testCALL");
-	for(int i = 0; i < sizeof(ma_map); ++i)
+	for(int i = 0; i < NB_OPTIONS_PRINTF; ++i)
 	{
 		if((ma_map + i)->key == c)
 			(ma_map + i)->fonc(inc, retour, args);
@@ -81,17 +82,18 @@ void 	entier(int* inc, int* retour, va_list args)
 
 int 	printf_option(const char *str, va_list args, ...)
 {
+	printf("testPRINTF_OPTION");
 	int i, retour;
 	i = retour = 0;
-	map_fct m;
-	init(&m);
+	map_fct *m;
+	init(m);
 
 	for(i = 0; i < strlen(str); ++i)
 	{
 		if(str[i]=='%' && i+1 < strlen(str))
 		{
 			++i;
-			call(&m,str[i],&i, &retour, args);
+			call(m,str[i],&i, &retour, args);
 			my_putchar(str[i]);
 		}
 		else
