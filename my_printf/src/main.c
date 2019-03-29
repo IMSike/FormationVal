@@ -1,4 +1,5 @@
 #include "my_printf.h"
+#include <stdio.h>
 
 int main (int argc, char *argv[])
 {

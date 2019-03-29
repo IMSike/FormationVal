@@ -17,6 +17,8 @@ unistd.h
 -
 string.h
 -
+stdio.h
+-
 my_printf.h
 /home/aurelien/project/my_printf/src/my_printf.h
 

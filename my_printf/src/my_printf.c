@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 #include "my_printf.h"
 
 void	my_putchar(char caractere)
@@ -55,6 +56,7 @@ void init(map_fct *ma_map)
 
 int call(map_fct *ma_map, char c, int* inc, int* retour, va_list args)
 {
+	printf("testCALL");
 	for(int i = 0; i < sizeof(ma_map); ++i)
 	{
 		if((ma_map + i)->key == c)
@@ -84,12 +86,13 @@ int 	printf_option(const char *str, va_list args, ...)
 	map_fct m;
 	init(&m);
 
-	for(i = 0; str[i] < strlen(str); ++i)
+	for(i = 0; i < strlen(str); ++i)
 	{
-		if(str[i]=='%')
+		if(str[i]=='%' && i+1 < strlen(str))
 		{
 			++i;
-			call(&m,str[i],i, retour, args);
+			call(&m,str[i],&i, &retour, args);
+			my_putchar(str[i]);
 		}
 		else
 		{
