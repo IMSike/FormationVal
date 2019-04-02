@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/my_malloc.dir/tests/main.c.o CMakeFiles/my_malloc.dir/src/my_malloc.c.o CMakeFiles/my_malloc.dir/src/blocks_management.c.o  -o my_malloc 
