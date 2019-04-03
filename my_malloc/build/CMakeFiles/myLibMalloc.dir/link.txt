@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC   -shared -Wl,-soname,libmyLibMalloc.so -o libmyLibMalloc.so CMakeFiles/myLibMalloc.dir/tests/main.c.o CMakeFiles/myLibMalloc.dir/src/my_malloc.c.o CMakeFiles/myLibMalloc.dir/src/blocks_management.c.o 

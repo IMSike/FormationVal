@@ -4,8 +4,6 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/aurelien/project/my_malloc/src/blocks_management.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/my_malloc.dir/src/blocks_management.c.o"
-  "/home/aurelien/project/my_malloc/src/my_malloc.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/my_malloc.dir/src/my_malloc.c.o"
   "/home/aurelien/project/my_malloc/tests/main.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/my_malloc.dir/tests/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
@@ -17,6 +15,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/aurelien/project/my_malloc/build/CMakeFiles/myLibMalloc.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

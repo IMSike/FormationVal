@@ -8,7 +8,7 @@ static ptr_bloc memoire = NULL;
  * Malloc
  * @param size
  */
-void *mon_malloc(size_t size)
+void *malloc(size_t size)
 {
 	ptr_bloc bloc;
 
@@ -40,7 +40,7 @@ void *mon_malloc(size_t size)
  * Free
  * @param ptr
  */
-void mon_free(void *ptr)
+void free(void *ptr)
 {
 	ptr_bloc bloc;
 
@@ -62,7 +62,7 @@ void mon_free(void *ptr)
  * @param nmemb Nombre d'elements
  * @param size Taille des elements
  */
-void *mon_calloc(size_t nmemb, size_t size)
+void *calloc(size_t nmemb, size_t size)
 {
 	size_t total;
 	void *ptr;
@@ -81,7 +81,7 @@ void *mon_calloc(size_t nmemb, size_t size)
  * @param ptr
  * @param size
  */
-void *mon_realloc(void *ptr, size_t size)
+void *realloc(void *ptr, size_t size)
 {
 	ptr_bloc old_bloc;
 	ptr_bloc new_bloc;
@@ -109,32 +109,3 @@ void *mon_realloc(void *ptr, size_t size)
 		return new_espace_utilisateur;
 	}
 }
-
-/**
- * Mallopt
- * @param cmd La variable a modifier
- * @param val La nouvelle valeur de la variable
- * @return 0 si erreur, 1 sinon
- *//*
-int mon_mallopt(int cmd, int val)
-{
-	/* Si un premier bloc a deja ete alloue *//*
-	if(mallopt_premiere_allocation == 1)
-		return 0;
-
-	if(val < 0)
-		return 0;
-
-	switch(cmd) {
-		case M_MXFAST:
-			maxfast = val;
-			break;
-		case M_NLBLOCKS:
-			numblks = val;
-			break;
-		default:
-			return 0;
-	}
-	return 1;
-}
-*/

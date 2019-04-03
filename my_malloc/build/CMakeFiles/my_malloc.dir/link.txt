@@ -1,1 +1,1 @@
-/usr/bin/cc   -rdynamic CMakeFiles/my_malloc.dir/tests/main.c.o CMakeFiles/my_malloc.dir/src/my_malloc.c.o CMakeFiles/my_malloc.dir/src/blocks_management.c.o  -o my_malloc 
+/usr/bin/cc   -rdynamic CMakeFiles/my_malloc.dir/tests/main.c.o  -o my_malloc -Wl,-rpath,/home/aurelien/project/my_malloc/build libmyLibMalloc.so 
