@@ -32,3 +32,15 @@ my_malloc.h
 blocks_management.h
 /home/aurelien/project/my_malloc/src/blocks_management.h
 
+/home/aurelien/project/my_malloc/src/my_malloc.c
+my_malloc.h
+/home/aurelien/project/my_malloc/src/my_malloc.h
+blocks_management.h
+/home/aurelien/project/my_malloc/src/blocks_management.h
+
+/home/aurelien/project/my_malloc/tests/main.c
+my_malloc.h
+/home/aurelien/project/my_malloc/tests/my_malloc.h
+blocks_management.h
+/home/aurelien/project/my_malloc/tests/blocks_management.h
+

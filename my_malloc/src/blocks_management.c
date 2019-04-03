@@ -1,13 +1,8 @@
 #include "my_malloc.h"
 #include "blocks_management.h"
- 
+
 /* Pointeur vers le premier bloc */
-static entete_p memoire = NULL;
- 
-/* Mallopt */
-static int maxfast = 0;
-static int numblks = 100;
-static int mallopt_premiere_allocation = 0; /* 0 si aucune premiere petite allocation a ete faite, 1 sinon */
+static ptr_bloc memoire = NULL;
 
 /**
  * Cree un nouveau bloc a l'aide d'un appel systeme
@@ -16,28 +11,28 @@ static int mallopt_premiere_allocation = 0; /* 0 si aucune premiere petite alloc
  * @param size La taille du bloc a creer
  * @return Un nouveau bloc ou NULL si erreur
  */
-static entete_p creer_bloc(size_t size)
+ptr_bloc create_bloc(size_t size)
 {
 	char *extension;
-	entete_p extension_entete;
- 
+	ptr_bloc tmp_bloc;
+
 	if(size < TAILLE_MIN)
 		size = TAILLE_MIN;
- 
-	extension = sbrk(size + TAILLE_ENTETE);
+
+	extension = sbrk(size + sizeof(struct memory_bloc));
 	if(extension ==  (void *) -1)
 		return NULL;
- 
-	extension_entete = (entete_p) extension;
-	extension_entete->taille_espace_utilisateur = size;
-	extension_entete->espace_utilisateur = extension + TAILLE_ENTETE;
-	extension_entete->entete_precedent = extension_entete;
-	extension_entete->entete_suivant = extension_entete;
-	extension_entete->etat = LIBRE;
- 
-	return extension_entete;
+
+	tmp_bloc = (ptr_bloc) extension;
+	tmp_bloc->user_space_size = size;
+	tmp_bloc->user_space = extension + sizeof(struct memory_bloc);
+	tmp_bloc->preview_bloc = tmp_bloc;
+	tmp_bloc->next_bloc = tmp_bloc;
+	tmp_bloc->state = FREE;
+
+	return tmp_bloc;
 }
- 
+
 /**
  * Renvoie le premier entete de bloc de taille au moins egale a size dans la
  * liste des blocs vides, si aucun bloc de taille suffisante n'est trouve, on
@@ -45,85 +40,85 @@ static entete_p creer_bloc(size_t size)
  * @param size La taille minimale du bloc a trouver
  * @return Le premier entete trouve ou NULL si aucun bloc
  */
-static entete_p recherche_bloc(size_t size)
+ptr_bloc find_bloc(size_t size)
 {
-	entete_p tmp;
- 
+	ptr_bloc tmp_bloc;
+
 	if(!memoire)
 		return NULL;
- 
-	tmp = memoire;
- 
-	while(tmp->taille_espace_utilisateur <= size || tmp->etat == OCCUPE) {
-		tmp = tmp->entete_suivant;
-		if(tmp == memoire) /* si on a fait le tour de la liste */
+
+	tmp_bloc = memoire;
+
+	while(tmp_bloc->user_space_size <= size || tmp_bloc->state == NOTFREE) {
+		tmp_bloc = tmp_bloc->next_bloc;
+		if(tmp_bloc == memoire) /* si on a fait le tour de la liste */
 			return NULL;
 	}
- 
-	return tmp;
+
+	return tmp_bloc;
 }
- 
+
 /**
  * Insere le bloc dans la memoire, dans l'ordre des adresses
  * @param bloc Le bloc a inserer
  */
-static void insere_bloc(entete_p bloc)
+void insert_bloc(ptr_bloc bloc)
 {
-	entete_p courant;
- 
+	ptr_bloc current_bloc;
+
 	/* Premiere insertion */
 	if(!memoire)
 		memoire = bloc;
- 
-	courant = memoire;
- 
-	while(courant < bloc) {
-		courant = courant->entete_suivant;
-		if(courant == memoire) /* Tour complet de liste */
+
+	current_bloc = memoire;
+
+	while(current_bloc < bloc) {
+		current_bloc = current_bloc->next_bloc;
+		if(current_bloc == memoire) /* Tour complet de liste */
 			break;
 	}
- 
-	bloc->entete_precedent = courant->entete_precedent;
-	bloc->entete_suivant = courant;
- 
-	courant->entete_precedent->entete_suivant = bloc;
-	courant->entete_precedent = bloc;
+
+	bloc->preview_bloc = current_bloc->preview_bloc;
+	bloc->next_bloc = current_bloc;
+
+	current_bloc->preview_bloc->next_bloc = bloc;
+	current_bloc->preview_bloc = bloc;
 }
- 
+
 /**
  * Il se peut que la taille du bloc soit superieure a size: par
- * exemple, si le reste est <= TAILLE_ENTETE, on ne peut pas creer de second bloc,
+ * exemple, si le reste est <= sizeof(struct memory_bloc), on ne peut pas creer de second bloc,
  * donc on laisse le reste dans le premier bloc
  * @param bloc Le bloc a couper
  * @param size La taille du bloc a creer
  */
-static void coupe_bloc(entete_p bloc, size_t size)
+void cut_bloc(ptr_bloc bloc, size_t size)
 {
-	entete_p nouveau_entete;
-	char *nouveau;
- 
+	ptr_bloc new_bloc;
+	char *new;
+
 	/* bonne taille, pas besoin de couper */
-	if(bloc->taille_espace_utilisateur == size)
+	if(bloc->user_space_size == size)
 		return;
- 
+
 	/* Si il n'y a pas assez de place pour creer un second bloc de reste */
-	if(bloc->taille_espace_utilisateur - size <= TAILLE_ENTETE)
+	if(bloc->user_space_size - size <= sizeof(struct memory_bloc))
 		return;
- 
-	nouveau = (char *)bloc + TAILLE_ENTETE + size;
-	nouveau_entete = (entete_p) nouveau;
-	nouveau_entete->taille_espace_utilisateur = bloc->taille_espace_utilisateur - size - TAILLE_ENTETE;
-	nouveau_entete->espace_utilisateur = nouveau + TAILLE_ENTETE;
-	nouveau_entete->entete_precedent = bloc;
-	nouveau_entete->entete_suivant = bloc->entete_suivant;
-	nouveau_entete->etat = LIBRE;
- 
-	bloc->entete_suivant->entete_precedent = nouveau_entete;
-	bloc->taille_espace_utilisateur = size;
-	bloc->entete_suivant = nouveau_entete;
-	bloc->etat = LIBRE;
+
+	new = (char *)bloc + sizeof(struct memory_bloc) + size;
+	new_bloc = (ptr_bloc) new;
+	new_bloc->user_space_size = bloc->user_space_size - size - sizeof(struct memory_bloc);
+	new_bloc->user_space = new + sizeof(struct memory_bloc);
+	new_bloc->preview_bloc = bloc;
+	new_bloc->next_bloc = bloc->next_bloc;
+	new_bloc->state = FREE;
+
+	bloc->next_bloc->preview_bloc = new_bloc;
+	bloc->user_space_size = size;
+	bloc->next_bloc = new_bloc;
+	bloc->state = FREE;
 }
- 
+
 /**
  * Fusionne les bloc b1 et b2, b1 doit etre juste avant b2
  * Apres l'appel de la fonction, b2 est "detruit", b1 prend la place
@@ -131,94 +126,94 @@ static void coupe_bloc(entete_p bloc, size_t size)
  * @param b1
  * @param b2
  */
-static void fusion_bloc(entete_p b1, entete_p b2)
+void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
 {
 	/* TODO Et si les deux blocs ne sont pas contigus ??? */
-	b1->taille_espace_utilisateur = b1->taille_espace_utilisateur + TAILLE_ENTETE + b2->taille_espace_utilisateur;
-	b1->entete_suivant = b2->entete_suivant;
-	b2->entete_suivant->entete_precedent = b1;
-	b1->etat = LIBRE;
+	b1->user_space_size = b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
+	b1->next_bloc = b2->next_bloc;
+	b2->next_bloc->preview_bloc = b1;
+	b1->state = FREE;
 }
- 
+
 /**
  * Copie l'espace utilisateur du bloc "old" dans l'espace utilisateur du bloc "new"
  * La taille de l'espace de new doit etre superieure ou egale a celle de "old"
  * @param old_bloc L'ancien bloc
  * @param new_bloc Le nouveau bloc cree
  */
-static void copie_bloc(entete_p old_bloc, entete_p new_bloc)
+void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
 {
-	char *old_espace_utilisateur, *new_espace_utilisateur;
+	char *old_user_space, *new_user_space;
 	unsigned int i;
- 
-	if(new_bloc->taille_espace_utilisateur < old_bloc->taille_espace_utilisateur)
+
+	if(new_bloc->user_space_size < old_bloc->user_space_size)
 		return;
- 
-	old_espace_utilisateur = old_bloc->espace_utilisateur;
-	new_espace_utilisateur = new_bloc->espace_utilisateur;
- 
-	for(i = 0; i < old_bloc->taille_espace_utilisateur; i++)
-		new_espace_utilisateur[i] = old_espace_utilisateur[i];
+
+	old_user_space = old_bloc->user_space;
+	new_user_space = new_bloc->user_space;
+
+	for(i = 0; i < old_bloc->user_space_size; i++)
+		new_user_space[i] = old_user_space[i];
 }
- 
+
 /**
  * Renvoie le bloc qui correspond au pointeur d'espace utilisateur
  * passe en parametre
  * @return Le bloc correspondant
  */
-static entete_p espace_utilisateur_to_bloc(void *ptr)
+ptr_bloc user_space_to_bloc(void *ptr)
 {
 	char *tmp;
-	entete_p bloc;
- 
+	ptr_bloc bloc;
+
 	tmp = ptr;
-	tmp -= TAILLE_ENTETE;
-	bloc = (entete_p)tmp;
- 
+	tmp -= sizeof(struct memory_bloc);
+	bloc = (ptr_bloc)tmp;
+
 	return bloc;
 }
- 
+
 /**
  * Affiche le contenu de la memoire (adresses des blocs, taille, debut des
  * espaces utilisateur, etat...)
  */
-static void affiche_memoire()
+void print_alloc(void)
 {
-	entete_p tmp;
+	ptr_bloc tmp;
 	int nb_bloc;
- 
+
 	if(!memoire) {
 		printf("Memoire vide\n\n\n");
 		return;
 	}
- 
+
 	tmp = memoire;
 	nb_bloc = 1;
- 
+
 	do {
 		printf("Bloc %d\n", nb_bloc);
-		affiche_bloc(tmp);
-		tmp = tmp->entete_suivant;
+		print_bloc(tmp);
+		tmp = tmp->next_bloc;
 		nb_bloc++;
 	} while(tmp != memoire); /* On continue tant qu'on n'est pas revenu au debut de la liste circulaire */
 }
- 
+
 /**
  * Affiche les informations du bloc
  * @param bloc Le bloc
  */
-static void affiche_bloc(entete_p bloc)
+void print_bloc(ptr_bloc bloc)
 {
 	if(!bloc) {
 		printf("Bloc NULL\n\n\n");
 		return;
 	}
- 
+
 	printf("Adresse: %p\n", bloc);
-	printf("Espace utilisateur: %p\n", bloc->espace_utilisateur);
-	printf("Taille: %d\n", bloc->taille_espace_utilisateur);
-	printf("Etat: %d\n", bloc->etat);
-	printf("Entete precedent: %p\n", bloc->entete_precedent);
-	printf("Entete suivant: %p\n", bloc->entete_suivant);
+	printf("Espace utilisateur: %p\n", bloc->user_space);
+	printf("Taille: %d\n", bloc->user_space_size);
+	printf("Etat: %d\n", bloc->state);
+	printf("Entete precedent: %p\n", bloc->preview_bloc);
+	printf("Entete suivant: %p\n", bloc->next_bloc);
 	printf("\n\n");
 }

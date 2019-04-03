@@ -9,5 +9,7 @@ CMakeFiles/my_malloc.dir/src/my_malloc.c.o: ../headers/blocks_management.h
 CMakeFiles/my_malloc.dir/src/my_malloc.c.o: ../headers/my_malloc.h
 CMakeFiles/my_malloc.dir/src/my_malloc.c.o: ../src/my_malloc.c
 
+CMakeFiles/my_malloc.dir/tests/main.c.o: ../headers/blocks_management.h
+CMakeFiles/my_malloc.dir/tests/main.c.o: ../headers/my_malloc.h
 CMakeFiles/my_malloc.dir/tests/main.c.o: ../tests/main.c
 

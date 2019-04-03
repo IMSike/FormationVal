@@ -1,67 +1,62 @@
 #include "my_malloc.h"
 #include "blocks_management.h"
- 
+
 /* Pointeur vers le premier bloc */
-static entete_p memoire = NULL;
- 
-/* Mallopt */
-static int maxfast = 0;
-static int numblks = 100;
-static int mallopt_premiere_allocation = 0; /* 0 si aucune premiere petite allocation a ete faite, 1 sinon */
- 
+static ptr_bloc memoire = NULL;
+
 /**
  * Malloc
  * @param size
  */
 void *mon_malloc(size_t size)
-{	
-	entete_p bloc;
- 
+{
+	ptr_bloc bloc;
+
 	if(size == 0)
 		return NULL;
- 
-	bloc = recherche_bloc(size);
- 
+
+	bloc = find_bloc(size);
+
 	/* Aucun bloc */
 	if(!bloc) {
-		bloc = creer_bloc(size);
+		bloc = create_bloc(size);
 		if(bloc) {
-			insere_bloc(bloc);
+			insert_bloc(bloc);
 		} else {
 			return NULL;
 		}
-		coupe_bloc(bloc, size);
-		bloc->etat = OCCUPE;
-		return bloc->espace_utilisateur;
+		cut_bloc(bloc, size);
+		bloc->state = NOTFREE;
+		return bloc->user_space;
 	}
- 
-	if(bloc->taille_espace_utilisateur > size)
-		coupe_bloc(bloc, size);
-	bloc->etat = OCCUPE;
-	return bloc->espace_utilisateur;
+
+	if(bloc->user_space_size > size)
+		cut_bloc(bloc, size);
+	bloc->state = NOTFREE;
+	return bloc->user_space;
 }
- 
+
 /**
  * Free
  * @param ptr
  */
 void mon_free(void *ptr)
 {
-	entete_p bloc;
- 
-	bloc = espace_utilisateur_to_bloc(ptr);
- 
-	bloc->etat = LIBRE;
- 
-	if(bloc->entete_suivant->etat == LIBRE && bloc < bloc->entete_suivant) {
-		fusion_bloc(bloc, bloc->entete_suivant);
+	ptr_bloc bloc;
+
+	bloc = user_space_to_bloc(ptr);
+
+	bloc->state = FREE;
+
+	if(bloc->next_bloc->state == FREE && bloc < bloc->next_bloc) {
+		fusion_bloc(bloc, bloc->next_bloc);
 	}
- 
-	if(bloc->entete_precedent->etat == LIBRE && bloc->entete_precedent < bloc) {
-		fusion_bloc(bloc->entete_precedent, bloc);
+
+	if(bloc->preview_bloc->state == FREE && bloc->preview_bloc < bloc) {
+		fusion_bloc(bloc->preview_bloc, bloc);
 	}
 }
- 
+
 /**
  * Calloc
  * @param nmemb Nombre d'elements
@@ -71,16 +66,16 @@ void *mon_calloc(size_t nmemb, size_t size)
 {
 	size_t total;
 	void *ptr;
- 
+
 	total = nmemb * size;
 	ptr = mon_malloc(total);
- 
+
 	if(!ptr)
 		return NULL;
- 
+
 	return memset(ptr, 0, total); /* TODO ? */
 }
- 
+
 /**
  * Realloc
  * @param ptr
@@ -88,48 +83,48 @@ void *mon_calloc(size_t nmemb, size_t size)
  */
 void *mon_realloc(void *ptr, size_t size)
 {
-	entete_p old_bloc;
-	entete_p new_bloc;
+	ptr_bloc old_bloc;
+	ptr_bloc new_bloc;
 	void *new_espace_utilisateur;
- 
+
 	if(!ptr)
 		return mon_malloc(size);
- 
-	old_bloc = espace_utilisateur_to_bloc(ptr);
- 
+
+	old_bloc = user_space_to_bloc(ptr);
+
 	/* Si l'espace dans le bloc est deja suffisant */
-	if(old_bloc->taille_espace_utilisateur >= size) {
+	if(old_bloc->user_space_size >= size) {
 		/* Si il y a assez de place, on coupe le bloc */
-		if(old_bloc->taille_espace_utilisateur > TAILLE_ENTETE + size)
-			coupe_bloc(old_bloc, size);
+		if(old_bloc->user_space_size > sizeof(struct memory_bloc) + size)
+			cut_bloc(old_bloc, size);
 		return ptr;
 	} else {
 		/* TODO Essayer de fusionner blocs adjascents */
 		new_espace_utilisateur = mon_malloc(size);
 		if(!new_espace_utilisateur)
 			return NULL;
-		new_bloc = espace_utilisateur_to_bloc(new_espace_utilisateur);
-		copie_bloc(old_bloc, new_bloc);
+		new_bloc = user_space_to_bloc(new_espace_utilisateur);
+		copy_bloc(old_bloc, new_bloc);
 		mon_free(ptr);
 		return new_espace_utilisateur;
 	}
 }
- 
+
 /**
  * Mallopt
  * @param cmd La variable a modifier
  * @param val La nouvelle valeur de la variable
  * @return 0 si erreur, 1 sinon
- */
+ *//*
 int mon_mallopt(int cmd, int val)
 {
-	/* Si un premier bloc a deja ete alloue */
+	/* Si un premier bloc a deja ete alloue *//*
 	if(mallopt_premiere_allocation == 1)
 		return 0;
- 
+
 	if(val < 0)
 		return 0;
- 
+
 	switch(cmd) {
 		case M_MXFAST:
 			maxfast = val;
@@ -140,7 +135,6 @@ int mon_mallopt(int cmd, int val)
 		default:
 			return 0;
 	}
- 
 	return 1;
 }
- 
+*/
