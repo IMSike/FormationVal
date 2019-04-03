@@ -13,10 +13,10 @@ set(	HEADERS
 
 set(	GCC_COVERAGE_COMPILE_FLAGS "-W -Wextra -Wall")
 
-add_library( myLibMalloc SHARED ${SRCS} ${HEADERS})
+add_library( myMalloc SHARED ${SRCS} ${HEADERS})
 add_executable(my_malloc tests/main.c)
-target_link_libraries(my_malloc myLibMalloc)
+target_link_libraries(my_malloc myMalloc)
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
-target_include_directories(myLibMalloc PUBLIC headers)
+target_include_directories(myMalloc PUBLIC headers)
 target_include_directories(my_malloc PUBLIC headers)

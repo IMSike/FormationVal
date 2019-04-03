@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named myLibMalloc
+# Target rules for targets named myMalloc
 
 # Build rule for target.
-myLibMalloc: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 myLibMalloc
-.PHONY : myLibMalloc
+myMalloc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 myMalloc
+.PHONY : myMalloc
 
 # fast build rule for target.
-myLibMalloc/fast:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/build
-.PHONY : myLibMalloc/fast
+myMalloc/fast:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/build
+.PHONY : myMalloc/fast
 
 #=============================================================================
 # Target rules for targets named my_malloc
@@ -142,7 +142,7 @@ src/blocks_management.o: src/blocks_management.c.o
 
 # target to build an object file
 src/blocks_management.c.o:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/blocks_management.c.o
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/blocks_management.c.o
 .PHONY : src/blocks_management.c.o
 
 src/blocks_management.i: src/blocks_management.c.i
@@ -151,7 +151,7 @@ src/blocks_management.i: src/blocks_management.c.i
 
 # target to preprocess a source file
 src/blocks_management.c.i:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/blocks_management.c.i
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/blocks_management.c.i
 .PHONY : src/blocks_management.c.i
 
 src/blocks_management.s: src/blocks_management.c.s
@@ -160,7 +160,7 @@ src/blocks_management.s: src/blocks_management.c.s
 
 # target to generate assembly for a file
 src/blocks_management.c.s:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/blocks_management.c.s
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/blocks_management.c.s
 .PHONY : src/blocks_management.c.s
 
 src/my_malloc.o: src/my_malloc.c.o
@@ -169,7 +169,7 @@ src/my_malloc.o: src/my_malloc.c.o
 
 # target to build an object file
 src/my_malloc.c.o:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/my_malloc.c.o
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_malloc.c.o
 .PHONY : src/my_malloc.c.o
 
 src/my_malloc.i: src/my_malloc.c.i
@@ -178,7 +178,7 @@ src/my_malloc.i: src/my_malloc.c.i
 
 # target to preprocess a source file
 src/my_malloc.c.i:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/my_malloc.c.i
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_malloc.c.i
 .PHONY : src/my_malloc.c.i
 
 src/my_malloc.s: src/my_malloc.c.s
@@ -187,7 +187,7 @@ src/my_malloc.s: src/my_malloc.c.s
 
 # target to generate assembly for a file
 src/my_malloc.c.s:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/src/my_malloc.c.s
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_malloc.c.s
 .PHONY : src/my_malloc.c.s
 
 tests/main.o: tests/main.c.o
@@ -196,7 +196,7 @@ tests/main.o: tests/main.c.o
 
 # target to build an object file
 tests/main.c.o:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/tests/main.c.o
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/tests/main.c.o
 	$(MAKE) -f CMakeFiles/my_malloc.dir/build.make CMakeFiles/my_malloc.dir/tests/main.c.o
 .PHONY : tests/main.c.o
 
@@ -206,7 +206,7 @@ tests/main.i: tests/main.c.i
 
 # target to preprocess a source file
 tests/main.c.i:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/tests/main.c.i
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/tests/main.c.i
 	$(MAKE) -f CMakeFiles/my_malloc.dir/build.make CMakeFiles/my_malloc.dir/tests/main.c.i
 .PHONY : tests/main.c.i
 
@@ -216,7 +216,7 @@ tests/main.s: tests/main.c.s
 
 # target to generate assembly for a file
 tests/main.c.s:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/tests/main.c.s
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/tests/main.c.s
 	$(MAKE) -f CMakeFiles/my_malloc.dir/build.make CMakeFiles/my_malloc.dir/tests/main.c.s
 .PHONY : tests/main.c.s
 
@@ -228,7 +228,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... myLibMalloc"
+	@echo "... myMalloc"
 	@echo "... my_malloc"
 	@echo "... src/blocks_management.o"
 	@echo "... src/blocks_management.i"

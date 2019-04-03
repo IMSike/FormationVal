@@ -15,7 +15,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/aurelien/project/my_malloc/build/CMakeFiles/myLibMalloc.dir/DependInfo.cmake"
+  "/home/aurelien/project/my_malloc/build/CMakeFiles/myMalloc.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

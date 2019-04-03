@@ -68,7 +68,7 @@ void *calloc(size_t nmemb, size_t size)
 	void *ptr;
 
 	total = nmemb * size;
-	ptr = mon_malloc(total);
+	ptr = malloc(total);
 
 	if(!ptr)
 		return NULL;
@@ -88,7 +88,7 @@ void *realloc(void *ptr, size_t size)
 	void *new_espace_utilisateur;
 
 	if(!ptr)
-		return mon_malloc(size);
+		return malloc(size);
 
 	old_bloc = user_space_to_bloc(ptr);
 
@@ -100,12 +100,12 @@ void *realloc(void *ptr, size_t size)
 		return ptr;
 	} else {
 		/* TODO Essayer de fusionner blocs adjascents */
-		new_espace_utilisateur = mon_malloc(size);
+		new_espace_utilisateur = malloc(size);
 		if(!new_espace_utilisateur)
 			return NULL;
 		new_bloc = user_space_to_bloc(new_espace_utilisateur);
 		copy_bloc(old_bloc, new_bloc);
-		mon_free(ptr);
+		free(ptr);
 		return new_espace_utilisateur;
 	}
 }

@@ -65,39 +65,39 @@ CMAKE_SOURCE_DIR = /home/aurelien/project/my_malloc
 CMAKE_BINARY_DIR = /home/aurelien/project/my_malloc/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/myLibMalloc.dir
+# Target rules for target CMakeFiles/myMalloc.dir
 
 # All Build rule for target.
-CMakeFiles/myLibMalloc.dir/all:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/depend
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/aurelien/project/my_malloc/build/CMakeFiles --progress-num=1,2,3,4 "Built target myLibMalloc"
-.PHONY : CMakeFiles/myLibMalloc.dir/all
+CMakeFiles/myMalloc.dir/all:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/depend
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/aurelien/project/my_malloc/build/CMakeFiles --progress-num=1,2,3,4 "Built target myMalloc"
+.PHONY : CMakeFiles/myMalloc.dir/all
 
 # Include target in all.
-all: CMakeFiles/myLibMalloc.dir/all
+all: CMakeFiles/myMalloc.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/myLibMalloc.dir/rule: cmake_check_build_system
+CMakeFiles/myMalloc.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/aurelien/project/my_malloc/build/CMakeFiles 4
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/myLibMalloc.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/myMalloc.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/aurelien/project/my_malloc/build/CMakeFiles 0
-.PHONY : CMakeFiles/myLibMalloc.dir/rule
+.PHONY : CMakeFiles/myMalloc.dir/rule
 
 # Convenience name for target.
-myLibMalloc: CMakeFiles/myLibMalloc.dir/rule
+myMalloc: CMakeFiles/myMalloc.dir/rule
 
-.PHONY : myLibMalloc
-
-# clean rule for target.
-CMakeFiles/myLibMalloc.dir/clean:
-	$(MAKE) -f CMakeFiles/myLibMalloc.dir/build.make CMakeFiles/myLibMalloc.dir/clean
-.PHONY : CMakeFiles/myLibMalloc.dir/clean
+.PHONY : myMalloc
 
 # clean rule for target.
-clean: CMakeFiles/myLibMalloc.dir/clean
+CMakeFiles/myMalloc.dir/clean:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/clean
+.PHONY : CMakeFiles/myMalloc.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/myMalloc.dir/clean
 
 .PHONY : clean
 
@@ -105,7 +105,7 @@ clean: CMakeFiles/myLibMalloc.dir/clean
 # Target rules for target CMakeFiles/my_malloc.dir
 
 # All Build rule for target.
-CMakeFiles/my_malloc.dir/all: CMakeFiles/myLibMalloc.dir/all
+CMakeFiles/my_malloc.dir/all: CMakeFiles/myMalloc.dir/all
 	$(MAKE) -f CMakeFiles/my_malloc.dir/build.make CMakeFiles/my_malloc.dir/depend
 	$(MAKE) -f CMakeFiles/my_malloc.dir/build.make CMakeFiles/my_malloc.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/aurelien/project/my_malloc/build/CMakeFiles --progress-num=5,6 "Built target my_malloc"

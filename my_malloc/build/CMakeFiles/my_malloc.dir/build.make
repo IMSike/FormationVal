@@ -79,7 +79,7 @@ my_malloc_EXTERNAL_OBJECTS =
 
 my_malloc: CMakeFiles/my_malloc.dir/tests/main.c.o
 my_malloc: CMakeFiles/my_malloc.dir/build.make
-my_malloc: libmyLibMalloc.so
+my_malloc: libmyMalloc.so
 my_malloc: CMakeFiles/my_malloc.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/aurelien/project/my_malloc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable my_malloc"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/my_malloc.dir/link.txt --verbose=$(VERBOSE)
