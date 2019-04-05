@@ -23,7 +23,6 @@ void *malloc(size_t size)
 		if(bloc) {
 			my_putstr("malloc_test__creationBloc\n");
 			insert_bloc(bloc);
-			print_alloc();
 		} else {
 			my_putstr("malloc_test__echecCreation\n");
 			return NULL;
@@ -33,13 +32,10 @@ void *malloc(size_t size)
 		bloc->state = NOTFREE;
 		return bloc->user_space;
 	}
-	else
-		print_bloc(bloc);
-
+	my_putstr("malloc_test_BlocTrouve\n");
 	if(bloc->user_space_size > size)
 		cut_bloc(bloc, size);
 	bloc->state = NOTFREE;
-	print_alloc();
 	return bloc->user_space;
 }
 
@@ -49,6 +45,7 @@ void *malloc(size_t size)
  */
 void free(void *ptr)
 {
+	my_putstr("entree_free\n");
 	ptr_bloc bloc;
 
 	bloc = user_space_to_bloc(ptr);

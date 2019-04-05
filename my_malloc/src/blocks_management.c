@@ -50,7 +50,8 @@ ptr_bloc find_bloc(size_t size)
 
 	tmp_bloc = memoire;
 
-	while(tmp_bloc->user_space_size <= size || tmp_bloc->state == NOTFREE) {
+	while(tmp_bloc->user_space_size <= size || tmp_bloc->state == NOTFREE)
+	{
 		tmp_bloc = tmp_bloc->next_bloc;
 		if(tmp_bloc == memoire) /* si on a fait le tour de la liste */
 			return NULL;
@@ -65,25 +66,47 @@ ptr_bloc find_bloc(size_t size)
  */
 void insert_bloc(ptr_bloc bloc)
 {
+	my_putstr("entree_insertBloc\n");
 	ptr_bloc current_bloc;
 
 	/* Premiere insertion */
 	if(!memoire)
+	{
+		my_putstr("insertBloc_test_pasDePremierBloc\n");
 		memoire = bloc;
-
-	current_bloc = memoire;
-
-	while(current_bloc < bloc) {
-		current_bloc = current_bloc->next_bloc;
-		if(current_bloc == memoire) /* Tour complet de liste */
-			break;
+		bloc->preview_bloc = bloc;
+		bloc->next_bloc = bloc;
 	}
+	else if(memoire == memoire->next_bloc)
+	{
+		my_putstr("insertBloc_test_unseul bloc existant\n");
+		memoire->next_bloc = bloc;
+		memoire->preview_bloc = bloc;
+		bloc->next_bloc = memoire;
+		bloc->preview_bloc = memoire;
+	}
+	else
+	{
+		my_putstr("insertBloc_test_premierBlocExistant\n");
+		print_alloc();
+		current_bloc = memoire;
+		while(current_bloc < bloc)
+		{
+			my_putstr("insertBloc_dansLeWhile\n");
+			my_putstr("insertBloc__________________\n");
+			current_bloc = current_bloc->next_bloc;
+			my_putstr("insertBloc__________________\n");
+			if(current_bloc == memoire) /* Tour complet de liste */
+				break;
+		}
+		print_alloc();
+		bloc->preview_bloc = current_bloc->preview_bloc;
+		bloc->next_bloc = current_bloc;
 
-	bloc->preview_bloc = current_bloc->preview_bloc;
-	bloc->next_bloc = current_bloc;
-
-	current_bloc->preview_bloc->next_bloc = bloc;
-	current_bloc->preview_bloc = bloc;
+		current_bloc->preview_bloc->next_bloc = bloc;
+		current_bloc->preview_bloc = bloc;
+		print_alloc();
+	}
 }
 
 /**
@@ -181,6 +204,7 @@ ptr_bloc user_space_to_bloc(void *ptr)
 void print_alloc(void)
 {
 	my_putstr("entree_printAlloc\n");
+	my_putstr("	-----START-----\n\n\n");
 	ptr_bloc tmp;
 	int nb_bloc;
 
@@ -189,11 +213,15 @@ void print_alloc(void)
 
 	}else
 	{
+		/* on affiche le premier bloc */
+		my_putstr("Bloc 0");
+		my_putstr("\n");
+		print_bloc(memoire);
+		/* puis les autres, s'il y en a */
 		tmp = memoire->next_bloc;
 		nb_bloc = 1;
-
 		/* On continue tant qu'on n'est pas revenu au debut de la liste circulaire */
-		while(tmp != memoire || nb_bloc < 2)
+		while(tmp != memoire )
 		{
 			my_putstr("Bloc ");
 			my_putnbr(nb_bloc);
