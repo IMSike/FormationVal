@@ -190,6 +190,33 @@ src/my_malloc.c.s:
 	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_malloc.c.s
 .PHONY : src/my_malloc.c.s
 
+src/my_outputs.o: src/my_outputs.c.o
+
+.PHONY : src/my_outputs.o
+
+# target to build an object file
+src/my_outputs.c.o:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_outputs.c.o
+.PHONY : src/my_outputs.c.o
+
+src/my_outputs.i: src/my_outputs.c.i
+
+.PHONY : src/my_outputs.i
+
+# target to preprocess a source file
+src/my_outputs.c.i:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_outputs.c.i
+.PHONY : src/my_outputs.c.i
+
+src/my_outputs.s: src/my_outputs.c.s
+
+.PHONY : src/my_outputs.s
+
+# target to generate assembly for a file
+src/my_outputs.c.s:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/my_outputs.c.s
+.PHONY : src/my_outputs.c.s
+
 tests/main.o: tests/main.c.o
 
 .PHONY : tests/main.o
@@ -236,6 +263,9 @@ help:
 	@echo "... src/my_malloc.o"
 	@echo "... src/my_malloc.i"
 	@echo "... src/my_malloc.s"
+	@echo "... src/my_outputs.o"
+	@echo "... src/my_outputs.i"
+	@echo "... src/my_outputs.s"
 	@echo "... tests/main.o"
 	@echo "... tests/main.i"
 	@echo "... tests/main.s"

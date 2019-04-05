@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/home/aurelien/project/my_malloc/src/blocks_management.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/myMalloc.dir/src/blocks_management.c.o"
   "/home/aurelien/project/my_malloc/src/my_malloc.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/myMalloc.dir/src/my_malloc.c.o"
+  "/home/aurelien/project/my_malloc/src/my_outputs.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/myMalloc.dir/src/my_outputs.c.o"
   "/home/aurelien/project/my_malloc/tests/main.c" "/home/aurelien/project/my_malloc/build/CMakeFiles/myMalloc.dir/tests/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

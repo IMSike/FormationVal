@@ -1,5 +1,6 @@
 #include "my_malloc.h"
 #include "blocks_management.h"
+#include "my_outputs.h"
 
 /* Pointeur vers le premier bloc */
 static ptr_bloc memoire = NULL;
@@ -179,23 +180,31 @@ ptr_bloc user_space_to_bloc(void *ptr)
  */
 void print_alloc(void)
 {
+	my_putstr("entree_printAlloc\n");
 	ptr_bloc tmp;
 	int nb_bloc;
 
 	if(!memoire) {
-		printf("Memoire vide\n\n\n");
-		return;
+		my_putstr("Memoire vide\n\n\n");
+
+	}else
+	{
+		tmp = memoire->next_bloc;
+		nb_bloc = 1;
+
+		/* On continue tant qu'on n'est pas revenu au debut de la liste circulaire */
+		while(tmp != memoire || nb_bloc < 2)
+		{
+			my_putstr("Bloc ");
+			my_putnbr(nb_bloc);
+			my_putstr("\n");
+			//printf("Bloc %d\n", nb_bloc);
+			print_bloc(tmp);
+			tmp = tmp->next_bloc;
+			nb_bloc++;
+		}
 	}
-
-	tmp = memoire;
-	nb_bloc = 1;
-
-	do {
-		printf("Bloc %d\n", nb_bloc);
-		print_bloc(tmp);
-		tmp = tmp->next_bloc;
-		nb_bloc++;
-	} while(tmp != memoire); /* On continue tant qu'on n'est pas revenu au debut de la liste circulaire */
+	my_putstr("	-----END-----\n\n\n");
 }
 
 /**
@@ -205,15 +214,34 @@ void print_alloc(void)
 void print_bloc(ptr_bloc bloc)
 {
 	if(!bloc) {
-		printf("Bloc NULL\n\n\n");
+		my_putstr("Bloc NULL\n\n\n");
+		//printf("Bloc NULL\n\n\n");
 		return;
 	}
 
-	printf("Adresse: %p\n", bloc);
-	printf("Espace utilisateur: %p\n", bloc->user_space);
-	printf("Taille: %d\n", bloc->user_space_size);
-	printf("Etat: %d\n", bloc->state);
-	printf("Entete precedent: %p\n", bloc->preview_bloc);
-	printf("Entete suivant: %p\n", bloc->next_bloc);
-	printf("\n\n");
+	my_putstr("Adresse: ");
+	my_putptr((unsigned long)bloc);
+	my_putstr("\n");
+	//printf("Adresse: %p\n", bloc);
+	my_putstr("Espace utilisateur: ");
+	my_putptr((unsigned long)bloc->user_space);
+	my_putstr("\n");
+	//printf("Espace utilisateur: %p\n", bloc->user_space);
+	my_putstr("Taille: ");
+	my_putnbr((int)bloc->user_space_size);
+	my_putstr("\n");
+	//printf("Taille: %d\n", (int)bloc->user_space_size);
+	my_putstr("Etat: ");
+	my_putnbr((int)bloc->state);
+	my_putstr("\n");
+	//printf("Etat: %d\n", bloc->state);
+	my_putstr("Bloc précedent: ");
+	my_putptr((unsigned long)bloc->preview_bloc);
+	my_putstr("\n");
+	//printf("Bloc précedent: %p\n", bloc->preview_bloc);
+	my_putstr("Bloc suivant: ");
+	my_putptr((unsigned long)bloc->next_bloc);
+	my_putstr("\n");
+	//printf("Bloc suivant: %p\n", bloc->next_bloc);
+	my_putstr("\n\n");
 }

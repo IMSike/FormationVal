@@ -1,8 +1,6 @@
 #include "my_malloc.h"
 #include "blocks_management.h"
-
-/* Pointeur vers le premier bloc */
-static ptr_bloc memoire = NULL;
+#include "my_outputs.h"
 
 /**
  * Malloc
@@ -10,6 +8,7 @@ static ptr_bloc memoire = NULL;
  */
 void *malloc(size_t size)
 {
+	my_putstr("entree_malloc\n");
 	ptr_bloc bloc;
 
 	if(size == 0)
@@ -19,20 +18,28 @@ void *malloc(size_t size)
 
 	/* Aucun bloc */
 	if(!bloc) {
+		my_putstr("malloc_test__aucunBloc\n");
 		bloc = create_bloc(size);
 		if(bloc) {
+			my_putstr("malloc_test__creationBloc\n");
 			insert_bloc(bloc);
+			print_alloc();
 		} else {
+			my_putstr("malloc_test__echecCreation\n");
 			return NULL;
 		}
 		cut_bloc(bloc, size);
+		my_putstr("malloc_test__cutBloc()_exec\n");
 		bloc->state = NOTFREE;
 		return bloc->user_space;
 	}
+	else
+		print_bloc(bloc);
 
 	if(bloc->user_space_size > size)
 		cut_bloc(bloc, size);
 	bloc->state = NOTFREE;
+	print_alloc();
 	return bloc->user_space;
 }
 
