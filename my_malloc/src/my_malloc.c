@@ -37,6 +37,7 @@ void *malloc(size_t size)
 		cut_bloc(bloc, size);
 	bloc->state = NOTFREE;
 	return bloc->user_space;
+	my_putstr("sortie_malloc\n");
 }
 
 /**
@@ -47,18 +48,20 @@ void free(void *ptr)
 {
 	my_putstr("entree_free\n");
 	ptr_bloc bloc;
+	
+	my_putstr("free_blocAFREE :");
+	my_putptr((unsigned long) ptr);
+	my_putstr("\n");
 
 	bloc = user_space_to_bloc(ptr);
-
 	bloc->state = FREE;
-
 	if(bloc->next_bloc->state == FREE && bloc < bloc->next_bloc) {
 		fusion_bloc(bloc, bloc->next_bloc);
 	}
-
 	if(bloc->preview_bloc->state == FREE && bloc->preview_bloc < bloc) {
 		fusion_bloc(bloc->preview_bloc, bloc);
 	}
+	my_putstr("sortie_free\n");
 }
 
 /**

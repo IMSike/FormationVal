@@ -14,23 +14,27 @@ static ptr_bloc memoire = NULL;
  */
 ptr_bloc create_bloc(size_t size)
 {
+	my_putstr("entree_createBloc\n");
 	char *extension;
 	ptr_bloc tmp_bloc;
 
 	if(size < TAILLE_MIN)
 		size = TAILLE_MIN;
 
-	extension = sbrk(size + sizeof(struct memory_bloc));
+	extension = sbrk((intptr_t)(size + sizeof(struct memory_bloc)));
 	if(extension ==  (void *) -1)
+	{
+		my_putstr("createBloc_appelSBRK_echec\n");
 		return NULL;
-
+	}
+	my_putstr("createBloc_appelSBRK_ok\n");
 	tmp_bloc = (ptr_bloc) extension;
 	tmp_bloc->user_space_size = size;
 	tmp_bloc->user_space = extension + sizeof(struct memory_bloc);
 	tmp_bloc->preview_bloc = tmp_bloc;
 	tmp_bloc->next_bloc = tmp_bloc;
 	tmp_bloc->state = FREE;
-
+	my_putstr("sortie_createBloc\n");
 	return tmp_bloc;
 }
 
@@ -43,6 +47,7 @@ ptr_bloc create_bloc(size_t size)
  */
 ptr_bloc find_bloc(size_t size)
 {
+	my_putstr("entree_findBloc\n");
 	ptr_bloc tmp_bloc;
 
 	if(!memoire)
@@ -52,11 +57,12 @@ ptr_bloc find_bloc(size_t size)
 
 	while(tmp_bloc->user_space_size <= size || tmp_bloc->state == NOTFREE)
 	{
+		my_putstr("findBloc_dansWhile\n");
 		tmp_bloc = tmp_bloc->next_bloc;
 		if(tmp_bloc == memoire) /* si on a fait le tour de la liste */
 			return NULL;
 	}
-
+	my_putstr("sortie_findBloc\n");
 	return tmp_bloc;
 }
 
@@ -88,25 +94,22 @@ void insert_bloc(ptr_bloc bloc)
 	else
 	{
 		my_putstr("insertBloc_test_premierBlocExistant\n");
-		print_alloc();
+
 		current_bloc = memoire;
 		while(current_bloc < bloc)
 		{
 			my_putstr("insertBloc_dansLeWhile\n");
-			my_putstr("insertBloc__________________\n");
 			current_bloc = current_bloc->next_bloc;
-			my_putstr("insertBloc__________________\n");
 			if(current_bloc == memoire) /* Tour complet de liste */
 				break;
 		}
-		print_alloc();
 		bloc->preview_bloc = current_bloc->preview_bloc;
 		bloc->next_bloc = current_bloc;
 
 		current_bloc->preview_bloc->next_bloc = bloc;
 		current_bloc->preview_bloc = bloc;
-		print_alloc();
 	}
+	my_putstr("sortie_insertBloc\n");
 }
 
 /**
@@ -118,6 +121,7 @@ void insert_bloc(ptr_bloc bloc)
  */
 void cut_bloc(ptr_bloc bloc, size_t size)
 {
+	my_putstr("entree_cutBloc\n");
 	ptr_bloc new_bloc;
 	char *new;
 
@@ -141,6 +145,7 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	bloc->user_space_size = size;
 	bloc->next_bloc = new_bloc;
 	bloc->state = FREE;
+	my_putstr("sortie_cutBloc\n");
 }
 
 /**
@@ -152,11 +157,13 @@ void cut_bloc(ptr_bloc bloc, size_t size)
  */
 void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
 {
+	my_putstr("entree_fusionBloc\n");
 	/* TODO Et si les deux blocs ne sont pas contigus ??? */
 	b1->user_space_size = b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
 	b1->next_bloc = b2->next_bloc;
 	b2->next_bloc->preview_bloc = b1;
 	b1->state = FREE;
+	my_putstr("sortie_fusionBloc\n");
 }
 
 /**
@@ -167,6 +174,7 @@ void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
  */
 void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
 {
+	my_putstr("entree_copyBloc\n");
 	char *old_user_space, *new_user_space;
 	unsigned int i;
 
@@ -178,6 +186,7 @@ void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
 
 	for(i = 0; i < old_bloc->user_space_size; i++)
 		new_user_space[i] = old_user_space[i];
+	my_putstr("sortie_copyBloc\n");
 }
 
 /**
@@ -187,13 +196,15 @@ void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
  */
 ptr_bloc user_space_to_bloc(void *ptr)
 {
+	my_putstr("entree_userSpaceToBloc\n");
 	char *tmp;
 	ptr_bloc bloc;
-
 	tmp = ptr;
 	tmp -= sizeof(struct memory_bloc);
 	bloc = (ptr_bloc)tmp;
-
+	my_putstr("sortie_userSpaceToBloc\n");
+	print_alloc();
+	print_bloc(bloc);
 	return bloc;
 }
 
