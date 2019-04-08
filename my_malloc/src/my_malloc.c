@@ -6,8 +6,10 @@
 void *malloc(size_t size)
 {
 	lock();
-	my_malloc(size);
+	void *tmp = my_malloc(size);
 	unlock();
+	my_putstr("TEST\n");
+	return tmp;
 }
 
 void free(void *ptr)
@@ -40,19 +42,23 @@ void *my_malloc(size_t size)
 			insert_bloc(bloc);
 		} else {
 			my_putstr("malloc_test__echecCreation\n");
+			my_putstr("sortie_malloc\n");
 			return NULL;
 		}
 		cut_bloc(bloc, size);
 		my_putstr("malloc_test__cutBloc()_exec\n");
 		bloc->state = NOTFREE;
+		my_putstr("sortie_malloc\n");
+		print_bloc(bloc);
+		print_alloc();
 		return bloc->user_space;
 	}
 	my_putstr("malloc_test_BlocTrouve\n");
 	if(bloc->user_space_size > size)
 		cut_bloc(bloc, size);
 	bloc->state = NOTFREE;
-	return bloc->user_space;
 	my_putstr("sortie_malloc\n");
+	return bloc->user_space;
 }
 
 /**
@@ -65,10 +71,6 @@ void my_free(void *ptr)
 	if(ptr != NULL)
 	{
 		ptr_bloc bloc;
-
-		my_putstr("free_blocAFREE :");
-		my_putptr((unsigned long) ptr);
-		my_putstr("\n");
 
 		bloc = user_space_to_bloc(ptr);
 		bloc->state = FREE;
