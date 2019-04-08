@@ -6,8 +6,11 @@ CMakeFiles/myMalloc.dir/src/blocks_management.c.o
  ../headers/my_malloc.h
  ../headers/my_outputs.h
  /home/aurelien/project/my_malloc/src/blocks_management.c
+CMakeFiles/myMalloc.dir/src/mutex.c.o
+ /home/aurelien/project/my_malloc/src/mutex.c
 CMakeFiles/myMalloc.dir/src/my_malloc.c.o
  ../headers/blocks_management.h
+ ../headers/mutex.h
  ../headers/my_malloc.h
  ../headers/my_outputs.h
  /home/aurelien/project/my_malloc/src/my_malloc.c

@@ -17,11 +17,29 @@ ptr_bloc create_bloc(size_t size)
 	my_putstr("entree_createBloc\n");
 	char *extension;
 	ptr_bloc tmp_bloc;
-
+	int nbPageToCall;
+	int tmp_size;
+/*
 	if(size < TAILLE_MIN)
 		size = TAILLE_MIN;
 
 	extension = sbrk((intptr_t)(size + sizeof(struct memory_bloc)));
+*/
+	nbPageToCall = ((int)size <= getpagesize()) ? 1 : 0;
+	if((size + sizeof(struct memory_bloc)) > (long unsigned int)getpagesize())
+	{
+		tmp_size = size;
+		while((int)tmp_size > getpagesize())
+		{
+			nbPageToCall++;
+			tmp_size -= getpagesize();
+		}
+	}
+	extension = sbrk(nbPageToCall * getpagesize());
+
+
+
+
 	if(extension ==  (void *) -1)
 	{
 		my_putstr("createBloc_appelSBRK_echec\n");
@@ -57,7 +75,6 @@ ptr_bloc find_bloc(size_t size)
 
 	while(tmp_bloc->user_space_size <= size || tmp_bloc->state == NOTFREE)
 	{
-		my_putstr("findBloc_dansWhile\n");
 		tmp_bloc = tmp_bloc->next_bloc;
 		if(tmp_bloc == memoire) /* si on a fait le tour de la liste */
 			return NULL;
@@ -98,7 +115,6 @@ void insert_bloc(ptr_bloc bloc)
 		current_bloc = memoire;
 		while(current_bloc < bloc)
 		{
-			my_putstr("insertBloc_dansLeWhile\n");
 			current_bloc = current_bloc->next_bloc;
 			if(current_bloc == memoire) /* Tour complet de liste */
 				break;
@@ -203,8 +219,6 @@ ptr_bloc user_space_to_bloc(void *ptr)
 	tmp -= sizeof(struct memory_bloc);
 	bloc = (ptr_bloc)tmp;
 	my_putstr("sortie_userSpaceToBloc\n");
-	print_alloc();
-	print_bloc(bloc);
 	return bloc;
 }
 

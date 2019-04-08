@@ -16,6 +16,8 @@ string.h
 unistd.h
 -
 
+../headers/mutex.h
+
 ../headers/my_malloc.h
 stddef.h
 -
@@ -29,4 +31,6 @@ blocks_management.h
 /home/aurelien/project/my_malloc/src/blocks_management.h
 my_outputs.h
 /home/aurelien/project/my_malloc/src/my_outputs.h
+mutex.h
+/home/aurelien/project/my_malloc/src/mutex.h
 

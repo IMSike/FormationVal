@@ -1,12 +1,27 @@
 #include "my_malloc.h"
 #include "blocks_management.h"
 #include "my_outputs.h"
+#include "mutex.h"
+
+void *malloc(size_t size)
+{
+	lock();
+	my_malloc(size);
+	unlock();
+}
+
+void free(void *ptr)
+{
+	lock();
+	my_free(ptr);
+	unlock();
+}
 
 /**
  * Malloc
  * @param size
  */
-void *malloc(size_t size)
+void *my_malloc(size_t size)
 {
 	my_putstr("entree_malloc\n");
 	ptr_bloc bloc;
@@ -44,23 +59,28 @@ void *malloc(size_t size)
  * Free
  * @param ptr
  */
-void free(void *ptr)
+void my_free(void *ptr)
 {
 	my_putstr("entree_free\n");
-	ptr_bloc bloc;
-	
-	my_putstr("free_blocAFREE :");
-	my_putptr((unsigned long) ptr);
-	my_putstr("\n");
+	if(ptr != NULL)
+	{
+		ptr_bloc bloc;
 
-	bloc = user_space_to_bloc(ptr);
-	bloc->state = FREE;
-	if(bloc->next_bloc->state == FREE && bloc < bloc->next_bloc) {
-		fusion_bloc(bloc, bloc->next_bloc);
+		my_putstr("free_blocAFREE :");
+		my_putptr((unsigned long) ptr);
+		my_putstr("\n");
+
+		bloc = user_space_to_bloc(ptr);
+		bloc->state = FREE;
+		if(bloc->next_bloc->state == FREE && bloc < bloc->next_bloc) {
+			fusion_bloc(bloc, bloc->next_bloc);
+		}
+		if(bloc->preview_bloc->state == FREE && bloc->preview_bloc < bloc) {
+			fusion_bloc(bloc->preview_bloc, bloc);
+		}
 	}
-	if(bloc->preview_bloc->state == FREE && bloc->preview_bloc < bloc) {
-		fusion_bloc(bloc->preview_bloc, bloc);
-	}
+	else
+		my_putstr("free_ptr_NULL");
 	my_putstr("sortie_free\n");
 }
 

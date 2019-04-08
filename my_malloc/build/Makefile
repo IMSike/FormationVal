@@ -163,6 +163,33 @@ src/blocks_management.c.s:
 	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/blocks_management.c.s
 .PHONY : src/blocks_management.c.s
 
+src/mutex.o: src/mutex.c.o
+
+.PHONY : src/mutex.o
+
+# target to build an object file
+src/mutex.c.o:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/mutex.c.o
+.PHONY : src/mutex.c.o
+
+src/mutex.i: src/mutex.c.i
+
+.PHONY : src/mutex.i
+
+# target to preprocess a source file
+src/mutex.c.i:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/mutex.c.i
+.PHONY : src/mutex.c.i
+
+src/mutex.s: src/mutex.c.s
+
+.PHONY : src/mutex.s
+
+# target to generate assembly for a file
+src/mutex.c.s:
+	$(MAKE) -f CMakeFiles/myMalloc.dir/build.make CMakeFiles/myMalloc.dir/src/mutex.c.s
+.PHONY : src/mutex.c.s
+
 src/my_malloc.o: src/my_malloc.c.o
 
 .PHONY : src/my_malloc.o
@@ -260,6 +287,9 @@ help:
 	@echo "... src/blocks_management.o"
 	@echo "... src/blocks_management.i"
 	@echo "... src/blocks_management.s"
+	@echo "... src/mutex.o"
+	@echo "... src/mutex.i"
+	@echo "... src/mutex.s"
 	@echo "... src/my_malloc.o"
 	@echo "... src/my_malloc.i"
 	@echo "... src/my_malloc.s"
