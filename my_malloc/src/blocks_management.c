@@ -14,7 +14,8 @@ static ptr_bloc memoire = NULL;
  */
 ptr_bloc create_bloc(size_t size)
 {
-	my_putstr("entree_createBloc\n");
+	my_putstr("	entree_createBloc\n");
+	unsigned long pagesize = (unsigned long)getpagesize();
 	char *extension;
 	ptr_bloc tmp_bloc;
 	int nbPageToCall;
@@ -25,6 +26,7 @@ ptr_bloc create_bloc(size_t size)
 
 	extension = sbrk((intptr_t)(size + sizeof(struct memory_bloc)));
 */
+	unsigned long alloc_size = (((size + sizeof(struct memory_bloc)) / pagesize) + 1) * pagesize;
 	nbPageToCall = (size <= (size_t)getpagesize()) ? 1 : 0;
 	if((size + sizeof(struct memory_bloc)) > (size_t)getpagesize())
 	{
@@ -36,24 +38,31 @@ ptr_bloc create_bloc(size_t size)
 		}
 		nbPageToCall++;
 	}
-	extension = sbrk(nbPageToCall * getpagesize());
+	//extension = sbrk(nbPageToCall * getpagesize());
+	
+	extension = sbrk(alloc_size);
+	my_putstr("|||||||||||||||||||||||||||||||||||||||");
+	my_put_hex_nbr((size_t) alloc_size - (size_t) sizeof(struct memory_bloc));
+	my_putstr("|||||||||||||||||||||||||||||||||||||||");
+	my_put_hex_nbr((size_t) nbPageToCall * pagesize - sizeof(struct memory_bloc));
+	my_putstr("|||||||||||||||||||||||||||||||||||||||");
 
 
 	if(extension ==  (void *) -1)
 	{
-		my_putstr("createBloc_appelSBRK_echec\n");
+		my_putstr("		createBloc_appelSBRK_echec\n");
 		return NULL;
 	}
 
-	my_putstr("createBloc_appelSBRK_ok\n");
+	my_putstr("		createBloc_appelSBRK_ok\n");
 	tmp_bloc = (ptr_bloc) extension;
-	//tmp_bloc->user_space_size = size;
-	tmp_bloc->user_space_size = (size_t) nbPageToCall * getpagesize() - sizeof(struct memory_bloc);
+	tmp_bloc->user_space_size = (size_t) nbPageToCall * pagesize - sizeof(struct memory_bloc);
+	//tmp_bloc->user_space_size = (size_t) alloc_size - (size_t) sizeof(struct memory_bloc);
 	tmp_bloc->user_space = (void*)extension + sizeof(struct memory_bloc);
 	tmp_bloc->preview_bloc = tmp_bloc;
 	tmp_bloc->next_bloc = tmp_bloc;
 	tmp_bloc->state = FREE;
-	my_putstr("sortie_createBloc\n");
+	my_putstr("	sortie_createBloc\n");
 	return tmp_bloc;
 }
 
@@ -66,7 +75,7 @@ ptr_bloc create_bloc(size_t size)
  */
 ptr_bloc find_bloc(size_t size)
 {
-	my_putstr("entree_findBloc\n");
+	my_putstr("	entree_findBloc\n");
 	ptr_bloc tmp_bloc;
 
 	if(!memoire)
@@ -80,7 +89,7 @@ ptr_bloc find_bloc(size_t size)
 		if(tmp_bloc == memoire) /* si on a fait le tour de la liste */
 			return NULL;
 	}
-	my_putstr("sortie_findBloc\n");
+	my_putstr("	sortie_findBloc\n");
 	return tmp_bloc;
 }
 
@@ -90,20 +99,20 @@ ptr_bloc find_bloc(size_t size)
  */
 void insert_bloc(ptr_bloc bloc)
 {
-	my_putstr("entree_insertBloc\n");
+	my_putstr("	entree_insertBloc\n");
 	ptr_bloc current_bloc;
 
 	/* Premiere insertion */
 	if(!memoire)
 	{
-		my_putstr("insertBloc_test_pasDePremierBloc\n");
+		my_putstr("		insertBloc_test_pasDePremierBloc\n");
 		memoire = bloc;
 		bloc->preview_bloc = bloc;
 		bloc->next_bloc = bloc;
 	}
 	else if(memoire == memoire->next_bloc)
 	{
-		my_putstr("insertBloc_test_unseul bloc existant\n");
+		my_putstr("		insertBloc_test_unseul bloc existant\n");
 		memoire->next_bloc = bloc;
 		memoire->preview_bloc = bloc;
 		bloc->next_bloc = memoire;
@@ -111,7 +120,7 @@ void insert_bloc(ptr_bloc bloc)
 	}
 	else
 	{
-		my_putstr("insertBloc_test_premierBlocExistant\n");
+		my_putstr("		insertBloc_test_premierBlocExistant\n");
 
 		current_bloc = memoire;
 		while(current_bloc < bloc)
@@ -126,7 +135,7 @@ void insert_bloc(ptr_bloc bloc)
 		current_bloc->preview_bloc->next_bloc = bloc;
 		current_bloc->preview_bloc = bloc;
 	}
-	my_putstr("sortie_insertBloc\n");
+	my_putstr("	sortie_insertBloc\n");
 }
 
 /**
@@ -138,8 +147,7 @@ void insert_bloc(ptr_bloc bloc)
  */
 void cut_bloc(ptr_bloc bloc, size_t size)
 {
-	my_putstr("entree_cutBloc\n");
-	print_bloc(bloc);
+	my_putstr("	entree_cutBloc\n");
 
 	ptr_bloc new_bloc;
 	void *new;
@@ -147,23 +155,25 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	/* bonne taille, pas besoin de couper */
 	if(bloc->user_space_size == size)
 	{
-		my_putstr("cutBloc_pasBesoinDeCouper\n");
+		my_putstr("		cutBloc_pasBesoinDeCouper\n");
 		my_putnbr(bloc->user_space_size);
 		my_putstr("\n");
 		my_putnbr(size);
 		my_putstr("\n");
+		my_putstr("	sortie_cutBloc\n");
 		return;
 	}
 
 	/* Si il n'y a pas assez de place pour creer un second bloc de reste */
 	if(bloc->user_space_size - size <= sizeof(struct memory_bloc))
 	{
-		my_putstr("cutBloc_pasAsserDePlacePourCouper\n");
+		my_putstr("		cutBloc_pasAsserDePlacePourCouper\n");
+		my_putstr("	sortie_cutBloc\n");
 		return;
 	}
-	my_putstr("cutBloc_OnCoupe\n");
+	my_putstr("		cutBloc_OnCoupe\n			");
 	my_putnbr(bloc->user_space_size);
-	my_putstr("\n");
+	my_putstr("\n			");
 	my_putnbr(size);
 	my_putstr("\n");
 
@@ -179,9 +189,7 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	bloc->user_space_size = size;
 	bloc->next_bloc = new_bloc;
 	bloc->state = FREE;
-	print_bloc(bloc);
-	print_bloc(new_bloc);
-	my_putstr("sortie_cutBloc\n");
+	my_putstr("	sortie_cutBloc\n");
 }
 
 /**
@@ -193,13 +201,13 @@ void cut_bloc(ptr_bloc bloc, size_t size)
  */
 void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
 {
-	my_putstr("entree_fusionBloc\n");
+	my_putstr("	entree_fusionBloc\n");
 	/* TODO Et si les deux blocs ne sont pas contigus ??? */
 	b1->user_space_size = b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
 	b1->next_bloc = b2->next_bloc;
 	b2->next_bloc->preview_bloc = b1;
 	b1->state = FREE;
-	my_putstr("sortie_fusionBloc\n");
+	my_putstr("	sortie_fusionBloc\n");
 }
 
 /**
@@ -210,7 +218,7 @@ void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
  */
 void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
 {
-	my_putstr("entree_copyBloc\n");
+	my_putstr("	entree_copyBloc\n");
 	char *old_user_space, *new_user_space;
 	unsigned int i;
 
@@ -222,7 +230,7 @@ void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
 
 	for(i = 0; i < old_bloc->user_space_size; i++)
 		new_user_space[i] = old_user_space[i];
-	my_putstr("sortie_copyBloc\n");
+	my_putstr("	sortie_copyBloc\n");
 }
 
 /**
@@ -232,13 +240,13 @@ void copy_bloc(ptr_bloc old_bloc, ptr_bloc new_bloc)
  */
 ptr_bloc user_space_to_bloc(void *ptr)
 {
-	my_putstr("entree_userSpaceToBloc\n");
+	my_putstr("	entree_userSpaceToBloc\n");
 	char *tmp;
 	ptr_bloc bloc;
 	tmp = ptr;
 	tmp -= sizeof(struct memory_bloc);
 	bloc = (ptr_bloc)tmp;
-	my_putstr("sortie_userSpaceToBloc\n");
+	my_putstr("	sortie_userSpaceToBloc\n");
 	return bloc;
 }
 
@@ -248,7 +256,7 @@ ptr_bloc user_space_to_bloc(void *ptr)
  */
 void print_alloc(void)
 {
-	my_putstr("entree_printAlloc\n");
+	my_putstr("	entree_printAlloc\n");
 	my_putstr("	-----START-----\n");
 	my_putptr((unsigned long)sbrk(0));
 	my_putstr("\n\n\n");
@@ -305,6 +313,14 @@ void print_bloc(ptr_bloc bloc)
 	my_putstr("Taille: ");
 	my_putnbr((int)bloc->user_space_size);
 	my_putstr("\n");
+
+	my_putstr("TailleTHEORIQUE: ");
+	my_putnbr((int)bloc->next_bloc - (int)bloc);
+	my_putstr("\n");
+	my_putstr("TailleMETADONNEE: ");
+	my_putnbr((int)sizeof(struct memory_bloc));
+	my_putstr("\n");
+
 	//printf("Taille: %d\n", (int)bloc->user_space_size);
 	my_putstr("Etat: ");
 	my_putnbr((int)bloc->state);

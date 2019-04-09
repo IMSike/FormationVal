@@ -8,7 +8,7 @@ void *malloc(size_t size)
 	lock();
 	void *tmp = my_malloc(size);
 	unlock();
-	//print_alloc();
+	print_alloc();
 	return tmp;
 }
 
@@ -43,27 +43,27 @@ void *my_malloc(size_t size)
 
 	/* Aucun bloc */
 	if(!bloc) {
-		my_putstr("malloc_test__aucunBloc\n");
+		my_putstr("	malloc_test__aucunBloc\n");
 		bloc = create_bloc(size);
 		if(bloc) {
-			my_putstr("malloc_test__creationBloc\n");
+			my_putstr("	malloc_test__creationBloc\n");
 			insert_bloc(bloc);
 		} else {
-			my_putstr("malloc_test__echecCreation\n");
-			my_putstr("sortie_malloc\n");
+			my_putstr("	malloc_test__echecCreation\n");
+			my_putstr("sortie_malloc\n\n");
 			return NULL;
 		}
 		cut_bloc(bloc, size);
-		my_putstr("malloc_test__cutBloc()_exec\n");
+		my_putstr("	malloc_test__cutBloc()_exec\n");
 		bloc->state = NOTFREE;
-		my_putstr("sortie_malloc\n");
+		my_putstr("sortie_malloc\n\n");
 		return bloc->user_space;
 	}
-	my_putstr("malloc_test_BlocTrouve\n");
+	my_putstr("	malloc_test_BlocTrouve\n");
 	if(bloc->user_space_size > size)
 		cut_bloc(bloc, size);
 	bloc->state = NOTFREE;
-	my_putstr("sortie_malloc\n");
+	my_putstr("sortie_malloc\n\n");
 	return bloc->user_space;
 }
 
@@ -88,8 +88,8 @@ void my_free(void *ptr)
 		}
 	}
 	else
-		my_putstr("free_ptr_NULL");
-	my_putstr("sortie_free\n");
+		my_putstr("	free_ptr_NULL");
+	my_putstr("sortie_free\n\n");
 }
 
 /**
@@ -99,6 +99,7 @@ void my_free(void *ptr)
  */
 void *calloc(size_t nmemb, size_t size)
 {
+	my_putstr("entree_caloc\n");
 	size_t total;
 	void *ptr;
 
@@ -118,29 +119,37 @@ void *calloc(size_t nmemb, size_t size)
  */
 void *my_realloc(void *ptr, size_t size)
 {
+	my_putstr("entree_realoc\n");
 	ptr_bloc old_bloc;
 	ptr_bloc new_bloc;
 	void *new_espace_utilisateur;
 
 	if(!ptr)
-		return malloc(size);
+	{
+		my_putstr("	realoc_test1\n");
+		return my_malloc(size);
+	}
 
 	old_bloc = user_space_to_bloc(ptr);
 
 	/* Si l'espace dans le bloc est deja suffisant */
-	if(old_bloc->user_space_size >= size) {
+	if(old_bloc->user_space_size >= size)
+	{
+		my_putstr("	realoc_test2\n");
 		/* Si il y a assez de place, on coupe le bloc */
 		if(old_bloc->user_space_size > sizeof(struct memory_bloc) + size)
 			cut_bloc(old_bloc, size);
 		return ptr;
-	} else {
+	} else
+	{
+		my_putstr("	realoc_test3\n");
 		/* TODO Essayer de fusionner blocs adjascents */
-		new_espace_utilisateur = malloc(size);
+		new_espace_utilisateur = my_malloc(size);
 		if(!new_espace_utilisateur)
 			return NULL;
 		new_bloc = user_space_to_bloc(new_espace_utilisateur);
 		copy_bloc(old_bloc, new_bloc);
-		free(ptr);
+		my_free(ptr);
 		return new_espace_utilisateur;
 	}
 }
