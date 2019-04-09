@@ -8,8 +8,7 @@ void *malloc(size_t size)
 	lock();
 	void *tmp = my_malloc(size);
 	unlock();
-	//print_alloc();
-	//my_putptr((unsigned long)sbrk(0));
+	print_alloc();
 	return tmp;
 }
 

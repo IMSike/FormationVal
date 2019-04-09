@@ -39,17 +39,17 @@ ptr_bloc create_bloc(size_t size)
 	extension = sbrk(nbPageToCall * getpagesize());
 
 
-
-
 	if(extension ==  (void *) -1)
 	{
 		my_putstr("createBloc_appelSBRK_echec\n");
 		return NULL;
 	}
+
 	my_putstr("createBloc_appelSBRK_ok\n");
 	tmp_bloc = (ptr_bloc) extension;
-	tmp_bloc->user_space_size = size;
-	tmp_bloc->user_space = extension + sizeof(struct memory_bloc);
+	//tmp_bloc->user_space_size = size;
+	tmp_bloc->user_space_size = (size_t) nbPageToCall * getpagesize() - sizeof(struct memory_bloc);
+	tmp_bloc->user_space = (void*)extension + sizeof(struct memory_bloc);
 	tmp_bloc->preview_bloc = tmp_bloc;
 	tmp_bloc->next_bloc = tmp_bloc;
 	tmp_bloc->state = FREE;
@@ -139,21 +139,38 @@ void insert_bloc(ptr_bloc bloc)
 void cut_bloc(ptr_bloc bloc, size_t size)
 {
 	my_putstr("entree_cutBloc\n");
+	print_bloc(bloc);
+
 	ptr_bloc new_bloc;
-	char *new;
+	void *new;
 
 	/* bonne taille, pas besoin de couper */
-	if(bloc->user_space_size == size)
+	if((void*)bloc->user_space_size == size)
+	{
+		my_putstr("cutBloc_pasBesoinDeCouper\n");
+		my_putnbr(bloc->user_space_size);
+		my_putstr("\n");
+		my_putnbr(size);
+		my_putstr("\n");
 		return;
+	}
 
 	/* Si il n'y a pas assez de place pour creer un second bloc de reste */
-	if(bloc->user_space_size - size <= sizeof(struct memory_bloc))
+	if((void*)bloc->user_space_size - size <= sizeof(struct memory_bloc))
+	{
+		my_putstr("cutBloc_pasAsserDePlacePourCouper\n");
 		return;
+	}
+	my_putstr("cutBloc_OnCoupe\n");
+	my_putnbr(bloc->user_space_size);
+	my_putstr("\n");
+	my_putnbr(size);
+	my_putstr("\n");
 
-	new = (char *)bloc + sizeof(struct memory_bloc) + size;
+	new = (void *)bloc + sizeof(struct memory_bloc) + size;
 	new_bloc = (ptr_bloc) new;
-	new_bloc->user_space_size = bloc->user_space_size - size - sizeof(struct memory_bloc);
-	new_bloc->user_space = new + sizeof(struct memory_bloc);
+	new_bloc->user_space_size = (void*)bloc->user_space_size - size - sizeof(struct memory_bloc);
+	new_bloc->user_space = (void*)new + sizeof(struct memory_bloc);
 	new_bloc->preview_bloc = bloc;
 	new_bloc->next_bloc = bloc->next_bloc;
 	new_bloc->state = FREE;
@@ -162,6 +179,8 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	bloc->user_space_size = size;
 	bloc->next_bloc = new_bloc;
 	bloc->state = FREE;
+	print_bloc(bloc);
+	print_bloc(new_bloc);
 	my_putstr("sortie_cutBloc\n");
 }
 
@@ -176,7 +195,7 @@ void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
 {
 	my_putstr("entree_fusionBloc\n");
 	/* TODO Et si les deux blocs ne sont pas contigus ??? */
-	b1->user_space_size = b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
+	b1->user_space_size =(void*) b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
 	b1->next_bloc = b2->next_bloc;
 	b2->next_bloc->preview_bloc = b1;
 	b1->state = FREE;
@@ -230,7 +249,9 @@ ptr_bloc user_space_to_bloc(void *ptr)
 void print_alloc(void)
 {
 	my_putstr("entree_printAlloc\n");
-	my_putstr("	-----START-----\n\n\n");
+	my_putstr("	-----START-----\n");
+	my_putptr((unsigned long)sbrk(0));
+	my_putstr("\n\n\n");
 	ptr_bloc tmp;
 	int nb_bloc;
 
@@ -299,7 +320,7 @@ void print_bloc(ptr_bloc bloc)
 	//printf("Bloc suivant: %p\n", bloc->next_bloc);
 
 
-	if(bloc->next_bloc == bloc + sizeof(struct memory_bloc) + bloc->user_space_size)
+	if(bloc->next_bloc ==(void*) bloc + sizeof(struct memory_bloc) + bloc->user_space_size)
 		my_putstr("TEST_PLACEMENT_BLOC___OK\n");
 	else
 		my_putstr("TEST_PLACEMENT_BLOC___CAUTION !!!\n");
