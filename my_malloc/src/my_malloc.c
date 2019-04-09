@@ -8,7 +8,8 @@ void *malloc(size_t size)
 	lock();
 	void *tmp = my_malloc(size);
 	unlock();
-	my_putstr("TEST\n");
+	//print_alloc();
+	//my_putptr((unsigned long)sbrk(0));
 	return tmp;
 }
 
@@ -17,6 +18,14 @@ void free(void *ptr)
 	lock();
 	my_free(ptr);
 	unlock();
+}
+
+void *realloc(void *ptr, size_t size)
+{
+	lock();
+	void *tmp = my_realloc(ptr, size);
+	unlock();
+	return tmp;
 }
 
 /**
@@ -49,8 +58,6 @@ void *my_malloc(size_t size)
 		my_putstr("malloc_test__cutBloc()_exec\n");
 		bloc->state = NOTFREE;
 		my_putstr("sortie_malloc\n");
-		print_bloc(bloc);
-		print_alloc();
 		return bloc->user_space;
 	}
 	my_putstr("malloc_test_BlocTrouve\n");
@@ -110,7 +117,7 @@ void *calloc(size_t nmemb, size_t size)
  * @param ptr
  * @param size
  */
-void *realloc(void *ptr, size_t size)
+void *my_realloc(void *ptr, size_t size)
 {
 	ptr_bloc old_bloc;
 	ptr_bloc new_bloc;

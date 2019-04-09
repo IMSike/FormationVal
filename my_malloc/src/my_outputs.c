@@ -39,15 +39,16 @@ void	my_putptr(unsigned long nb)
 	{
 		my_putchar('0');
 		my_putchar('x');
-		my_put_hex_nbr((unsigned int)nb);
+		my_put_hex_nbr(nb);
 	}
 }
 
-int	my_put_hex_nbr(unsigned int nb)
+int	my_put_hex_nbr(unsigned long nb)
 {
-  	unsigned int	i;
+  	unsigned long	i;
 
-  	i = my_put_neg(nb);
+  	//i = my_put_neg(nb);
+  	i=nb;
   	if (i > 15)
     		my_put_hex_nbr(i / 16);
   	my_put_hex((i % 16) + '0');

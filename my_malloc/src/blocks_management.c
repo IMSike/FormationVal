@@ -18,22 +18,23 @@ ptr_bloc create_bloc(size_t size)
 	char *extension;
 	ptr_bloc tmp_bloc;
 	int nbPageToCall;
-	int tmp_size;
+	size_t tmp_size;
 /*
 	if(size < TAILLE_MIN)
 		size = TAILLE_MIN;
 
 	extension = sbrk((intptr_t)(size + sizeof(struct memory_bloc)));
 */
-	nbPageToCall = ((int)size <= getpagesize()) ? 1 : 0;
-	if((size + sizeof(struct memory_bloc)) > (long unsigned int)getpagesize())
+	nbPageToCall = (size <= (size_t)getpagesize()) ? 1 : 0;
+	if((size + sizeof(struct memory_bloc)) > (size_t)getpagesize())
 	{
 		tmp_size = size;
-		while((int)tmp_size > getpagesize())
+		while(tmp_size > (size_t)getpagesize())
 		{
 			nbPageToCall++;
 			tmp_size -= getpagesize();
 		}
+		nbPageToCall++;
 	}
 	extension = sbrk(nbPageToCall * getpagesize());
 
@@ -296,5 +297,12 @@ void print_bloc(ptr_bloc bloc)
 	my_putptr((unsigned long)bloc->next_bloc);
 	my_putstr("\n");
 	//printf("Bloc suivant: %p\n", bloc->next_bloc);
+
+
+	if(bloc->next_bloc == bloc + sizeof(struct memory_bloc) + bloc->user_space_size)
+		my_putstr("TEST_PLACEMENT_BLOC___OK\n");
+	else
+		my_putstr("TEST_PLACEMENT_BLOC___CAUTION !!!\n");
+
 	my_putstr("\n\n");
 }
