@@ -145,7 +145,7 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	void *new;
 
 	/* bonne taille, pas besoin de couper */
-	if((void*)bloc->user_space_size == size)
+	if(bloc->user_space_size == size)
 	{
 		my_putstr("cutBloc_pasBesoinDeCouper\n");
 		my_putnbr(bloc->user_space_size);
@@ -156,7 +156,7 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 	}
 
 	/* Si il n'y a pas assez de place pour creer un second bloc de reste */
-	if((void*)bloc->user_space_size - size <= sizeof(struct memory_bloc))
+	if(bloc->user_space_size - size <= sizeof(struct memory_bloc))
 	{
 		my_putstr("cutBloc_pasAsserDePlacePourCouper\n");
 		return;
@@ -169,7 +169,7 @@ void cut_bloc(ptr_bloc bloc, size_t size)
 
 	new = (void *)bloc + sizeof(struct memory_bloc) + size;
 	new_bloc = (ptr_bloc) new;
-	new_bloc->user_space_size = (void*)bloc->user_space_size - size - sizeof(struct memory_bloc);
+	new_bloc->user_space_size = bloc->user_space_size - size - sizeof(struct memory_bloc);
 	new_bloc->user_space = (void*)new + sizeof(struct memory_bloc);
 	new_bloc->preview_bloc = bloc;
 	new_bloc->next_bloc = bloc->next_bloc;
@@ -195,7 +195,7 @@ void fusion_bloc(ptr_bloc b1, ptr_bloc b2)
 {
 	my_putstr("entree_fusionBloc\n");
 	/* TODO Et si les deux blocs ne sont pas contigus ??? */
-	b1->user_space_size =(void*) b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
+	b1->user_space_size = b1->user_space_size + sizeof(struct memory_bloc) + b2->user_space_size;
 	b1->next_bloc = b2->next_bloc;
 	b2->next_bloc->preview_bloc = b1;
 	b1->state = FREE;

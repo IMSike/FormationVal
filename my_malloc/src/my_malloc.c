@@ -8,7 +8,7 @@ void *malloc(size_t size)
 	lock();
 	void *tmp = my_malloc(size);
 	unlock();
-	print_alloc();
+	//print_alloc();
 	return tmp;
 }
 
