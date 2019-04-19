@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../headers/crawler.h
+stdio.h
+-
+string.h
+-
+files_handling.h
+../headers/files_handling.h
+flag_handling.h
+../headers/flag_handling.h
+
+../headers/files_handling.h
+
+../headers/flag_handling.h
+
+/home/aurelien/project/crawler/tests/main.c
+crawler.h
+/home/aurelien/project/crawler/tests/crawler.h
+

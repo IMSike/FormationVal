@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC   -shared -Wl,-soname,libmyCrawler.so -o libmyCrawler.so CMakeFiles/myCrawler.dir/tests/main.c.o CMakeFiles/myCrawler.dir/srcs/crawler.c.o CMakeFiles/myCrawler.dir/srcs/files_handling.c.o CMakeFiles/myCrawler.dir/srcs/flag_handling.c.o 

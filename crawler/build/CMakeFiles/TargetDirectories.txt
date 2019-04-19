@@ -1,0 +1,4 @@
+/home/aurelien/project/crawler/build/CMakeFiles/rebuild_cache.dir
+/home/aurelien/project/crawler/build/CMakeFiles/edit_cache.dir
+/home/aurelien/project/crawler/build/CMakeFiles/myCrawler.dir
+/home/aurelien/project/crawler/build/CMakeFiles/my_crawler.dir
