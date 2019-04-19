@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include "crawler.h"
 
-const char* flags_list[NB_FLAGS]=  {"-h", "--help", "-n", "-i", "-o", "-r"}; //si rajout de flag : modifier NB_FLAGS dans flag_handling.h
+const char* flags_list[NB_FLAGS]=  {"-h", "--help", "-n", "-i"}; //si rajout de flag : modifier NB_FLAGS dans flag_handling.h
 
 void print_help()
 {
@@ -43,20 +43,24 @@ int isNumeric(char* str)
 
 void handling_flag(int argc, char *argv[])
 {
+	/*
 	char* directories[NB_FILE_OR_DIRECTORY_CAN_BE_SEND_IN_PARAMETERS];
 	int nb_directories = 0;
 	char* files[NB_FILE_OR_DIRECTORY_CAN_BE_SEND_IN_PARAMETERS];
 	int nb_files = 0;
+	*/
 	int number_of_threads_by_child;
 	int number_of_childs_can_be_active;
+	/*
 	char* filter_o = NULL;
 	char* filter_r = NULL;
-
+*/
 	for(int inc = 1; inc < argc; inc++)
 	{
 		switch (check_is_flag(argv[inc]))
 		{
 		case -1 : //flag inconnu, on test si c'est un fichier ou dossier
+			/*
 			if(isFile(argv[inc]) == 1)
 			{
 				if(isDirectory(argv[inc]))
@@ -65,7 +69,7 @@ void handling_flag(int argc, char *argv[])
 					files[nb_files++] = argv[inc];
 			}
 			else // Si c'est ni un dossier ni un fichier
-				printf("\nERROR : FLAG ISN'T RECOGNIZED IN handling_flag() IN flag_handling.c\n");
+			*/	printf("\nERROR : FLAG ISN'T RECOGNIZED IN handling_flag() IN flag_handling.c\n");
 			break;
 		case 0 	://flag -h
 		case 1	://flag --help
@@ -93,7 +97,7 @@ void handling_flag(int argc, char *argv[])
 			}
 			else
 				printf("ERROR : FLAG -i NEED A VALUE (use -h or --help for more informations\n");
-			break;
+			break;/*
 		case 4	://flag -o
 			if((inc + 1) < argc) //on verifi qu'il y est bien quelquechose derrière le flag
 				filter_o = argv[inc++];
@@ -101,12 +105,13 @@ void handling_flag(int argc, char *argv[])
 		case 5 	://flag -r
 			if((inc + 1) < argc) //on verifi qu'il y est bien quelquechose derrière le flag
 				filter_r = argv[inc++];
-			break;
+			break;*/
 		}
 	}
-	handling_brain(directories, nb_directories, files, nb_files, number_of_threads_by_child, number_of_childs_can_be_active, filter_o, filter_r);
+	handling_inputs(number_of_threads_by_child, number_of_childs_can_be_active);
+	//handling_brain(directories, nb_directories, files, nb_files, number_of_threads_by_child, number_of_childs_can_be_active, filter_o, filter_r);
 }
-
+/*
 void handling_brain(char* directories[], int nb_directories, char* files[], int nb_files, int number_of_threads_by_child, int number_of_childs_can_be_active, char* filter_o, char* filter_r)
 {
 	if(filter_r != NULL)
@@ -162,6 +167,7 @@ void handling_brain(char* directories[], int nb_directories, char* files[], int 
 			{
 				path=NULL;
 				path=malloc(PATH_SIZE_MAX);
+				path=directories[inc];
 				printf("||||||%s\n", directories[inc] );
 				strcat(path, directories[inc]);
 				strcat(path, "/");
@@ -191,4 +197,5 @@ void handling_brain(char* directories[], int nb_directories, char* files[], int 
 			
 		}
 	}
-}
+
+} */

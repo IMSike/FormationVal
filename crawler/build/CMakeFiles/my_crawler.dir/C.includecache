@@ -21,6 +21,14 @@ flag_handling.h
 ../headers/flag_handling.h
 
 /home/aurelien/project/crawler/tests/main.c
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+sys/time.h
+-
 crawler.h
 /home/aurelien/project/crawler/tests/crawler.h
 
