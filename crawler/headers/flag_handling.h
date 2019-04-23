@@ -11,5 +11,4 @@ void handling_flag(int argc, char *argv[]);
 void print_help();
 int isNumeric(char* str);
 
-
 #endif

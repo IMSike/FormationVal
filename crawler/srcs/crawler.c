@@ -6,16 +6,16 @@
 
 int stdin_is_empty()
 {
-	char str[256];
 	fd_set fds;
         struct timeval timeout = {0, 0};
         FD_ZERO(&fds);
         FD_SET(0, &fds);
-        if (select(0 + 1, &fds, 0, 0, &timeout) <= 0)
-            	return 0;
-        else 
-	        return 1;
+        if(select(0 + 1, &fds, NULL, NULL, &timeout) <= 0)
+        	return 1;
+        else
+        	return 0;
 }
+
 
 
 handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be_active)
@@ -28,7 +28,9 @@ handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be_acti
 		fscanf(stdin, "%s", input);
 		if(strcmp(input, "help") == 0) //affichage de l'aide
 			print_help();
+
 		printf("---%d\n", stdin_is_empty() );
+
 		if(strcmp(input, "read") == 0) //cas de lecture de fichier ou repertoire
 		{
 			char file[PATH_SIZE_MAX];

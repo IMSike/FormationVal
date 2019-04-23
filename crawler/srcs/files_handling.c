@@ -52,7 +52,6 @@ void print_line_of_file_contain(char* file_path, char* str)
 
 }
 
-
 //renvoi 1 si file_path est un fichier, 0 sinon
 int isFile(const char* file_path)
 {

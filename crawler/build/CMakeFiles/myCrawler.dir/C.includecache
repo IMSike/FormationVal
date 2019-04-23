@@ -20,6 +20,32 @@ flag_handling.h
 
 ../headers/flag_handling.h
 
+/home/aurelien/project/crawler/srcs/crawler.c
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+sys/time.h
+-
+crawler.h
+/home/aurelien/project/crawler/srcs/crawler.h
+
+/home/aurelien/project/crawler/srcs/files_handling.c
+dirent.h
+-
+crawler.h
+/home/aurelien/project/crawler/srcs/crawler.h
+
+/home/aurelien/project/crawler/srcs/flag_handling.c
+dirent.h
+-
+ctype.h
+-
+crawler.h
+/home/aurelien/project/crawler/srcs/crawler.h
+
 /home/aurelien/project/crawler/tests/main.c
 stdlib.h
 -

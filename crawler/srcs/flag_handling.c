@@ -55,6 +55,7 @@ void handling_flag(int argc, char *argv[])
 	char* filter_o = NULL;
 	char* filter_r = NULL;
 */
+
 	for(int inc = 1; inc < argc; inc++)
 	{
 		switch (check_is_flag(argv[inc]))
@@ -194,8 +195,6 @@ void handling_brain(char* directories[], int nb_directories, char* files[], int 
 				closedir(rep);
 				free(path);
 			}
-			
 		}
 	}
-
 } */
