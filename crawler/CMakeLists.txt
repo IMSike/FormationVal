@@ -18,6 +18,7 @@ set(	GCC_COVERAGE_COMPILE_FLAGS "-W -Wextra -Wall")
 add_library( myCrawler SHARED ${SRCS} ${HEADERS})
 add_executable(my_crawler tests/main.c)
 target_link_libraries(my_crawler myCrawler)
+target_link_libraries(my_crawler pthread)
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 target_include_directories(myCrawler PUBLIC headers)

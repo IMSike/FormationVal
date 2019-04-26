@@ -15,10 +15,34 @@ files_handling.h
 ../headers/files_handling.h
 flag_handling.h
 ../headers/flag_handling.h
+sockets.h
+../headers/sockets.h
+mutex.h
+../headers/mutex.h
 
 ../headers/files_handling.h
 
 ../headers/flag_handling.h
+
+../headers/mutex.h
+
+../headers/sockets.h
+winsock2.h
+-
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+unistd.h
+-
+stdio.h
+-
+stdlib.h
+-
 
 /home/aurelien/project/crawler/tests/main.c
 stdlib.h

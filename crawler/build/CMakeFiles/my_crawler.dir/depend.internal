@@ -5,4 +5,6 @@ CMakeFiles/my_crawler.dir/tests/main.c.o
  ../headers/crawler.h
  ../headers/files_handling.h
  ../headers/flag_handling.h
+ ../headers/mutex.h
+ ../headers/sockets.h
  /home/aurelien/project/crawler/tests/main.c
