@@ -9,6 +9,9 @@
 #include "mutex.h"
 
 #define SIZE_OF_CONTENT_FILE_MAX 3000
+#define FILTER_SIZE_MAX 300
+#define NUMBER_OF_FILE_MAX 100
+#define PATH_OF_COMMUNICATION_FILE_FOR_NAMED_PIPE "communication_file"
 
 /* Prototypes */
 void handling_inputs(int number_of_threads_by_child,int number_of_childs_can_be_active);

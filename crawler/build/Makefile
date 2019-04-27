@@ -217,6 +217,33 @@ srcs/flag_handling.c.s:
 	$(MAKE) -f CMakeFiles/myCrawler.dir/build.make CMakeFiles/myCrawler.dir/srcs/flag_handling.c.s
 .PHONY : srcs/flag_handling.c.s
 
+srcs/mutex.o: srcs/mutex.c.o
+
+.PHONY : srcs/mutex.o
+
+# target to build an object file
+srcs/mutex.c.o:
+	$(MAKE) -f CMakeFiles/myCrawler.dir/build.make CMakeFiles/myCrawler.dir/srcs/mutex.c.o
+.PHONY : srcs/mutex.c.o
+
+srcs/mutex.i: srcs/mutex.c.i
+
+.PHONY : srcs/mutex.i
+
+# target to preprocess a source file
+srcs/mutex.c.i:
+	$(MAKE) -f CMakeFiles/myCrawler.dir/build.make CMakeFiles/myCrawler.dir/srcs/mutex.c.i
+.PHONY : srcs/mutex.c.i
+
+srcs/mutex.s: srcs/mutex.c.s
+
+.PHONY : srcs/mutex.s
+
+# target to generate assembly for a file
+srcs/mutex.c.s:
+	$(MAKE) -f CMakeFiles/myCrawler.dir/build.make CMakeFiles/myCrawler.dir/srcs/mutex.c.s
+.PHONY : srcs/mutex.c.s
+
 tests/main.o: tests/main.c.o
 
 .PHONY : tests/main.o
@@ -266,6 +293,9 @@ help:
 	@echo "... srcs/flag_handling.o"
 	@echo "... srcs/flag_handling.i"
 	@echo "... srcs/flag_handling.s"
+	@echo "... srcs/mutex.o"
+	@echo "... srcs/mutex.i"
+	@echo "... srcs/mutex.s"
 	@echo "... tests/main.o"
 	@echo "... tests/main.i"
 	@echo "... tests/main.s"

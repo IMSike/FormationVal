@@ -3,11 +3,14 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/wait.h>
 #include <pthread.h>
 #include "crawler.h"
+#include "mutex.h"
 
 pid_t create_process(void)
 {
@@ -101,13 +104,35 @@ int read_user_command(char* command, char* action, char* file, char* filter)
 	return type_of_filter;
 }
 
+void create_complete_path(char* complete_path, char* part_1, char* part_2)
+{
+	*complete_path = '\0';
+	strcat(complete_path, part_1);
+	strcat(complete_path, "/");
+	strcat(complete_path, part_2);
+}
 
+void create_thread(t_com_s *arg, int type_of_filter, char* path, char* filter, int *size_of_message, pthread_t *tid)
+{
+	arg->type_of_filter = type_of_filter;
+	arg->path = malloc(sizeof(char)*PATH_SIZE_MAX);
+	strcpy(arg->path, path);
+	arg->filter = malloc(sizeof(char)*FILTER_SIZE_MAX);
+	strcpy(arg->filter, filter);
+	arg->size_of_what_to_print = size_of_message;
+	pthread_attr_t attr;
+	pthread_attr_init(&attr);
+	pthread_create(tid, &attr, getWhatToPrintInFile, arg);
+}
 
 
 void handling_print_directory(int type_of_filter, char* path, char* filter, int number_of_threads_by_child, int number_of_childs_can_be_active)
 {
+	int fd;
+	char* my_fifo = PATH_OF_COMMUNICATION_FILE_FOR_NAMED_PIPE;
+	mkfifo(my_fifo, 0666);
+
 	t_com_s args[number_of_threads_by_child];
-	int inc_of_active_thread = 0;
 	pthread_t tids[number_of_threads_by_child];
 
 	struct dirent *lecture;
@@ -115,41 +140,129 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 	rep = opendir(path);
 	char* complete_path = NULL;
 	complete_path = malloc(sizeof(char*)*PATH_SIZE_MAX);
-	while((lecture = readdir(rep)))
-	{
-		/*char* message;
-		message = malloc(sizeof(char)*SIZE_OF_CONTENT_FILE_MAX);*/
-		int size_of_message;
 
+	char* message;
+	message = malloc(sizeof(char)*SIZE_OF_CONTENT_FILE_MAX*NUMBER_OF_FILE_MAX);
+	int size_of_message;
+
+	int inc_of_active_processus = 0;
+	pid_t pid[number_of_childs_can_be_active];
+
+	lecture = readdir(rep);
+	while(lecture)
+	{
+		printf("TEST_while(lecture)________________\n");
+		while(inc_of_active_processus < number_of_childs_can_be_active && lecture) //tant qu'on est en dessous de la limite de process
+		{
+			printf("TEST_while_process-------------------------------------------------\n");
+			pid[inc_of_active_processus] = create_process();
+			if(pid[inc_of_active_processus] == -1)
+				printf("ERROR : FAILLURE WHEN CREATE A PROCESS in handling_print_directory() in crawler.c\n");
+			else if(pid[inc_of_active_processus] == 0) // processus fils
+			{
+				int inc_of_active_thread = 0;
+				while(inc_of_active_thread < number_of_threads_by_child && lecture) //tant qu'on est en dessous de la limite de threads
+				{
+					printf("TEST_while_thread~~~~~~~~~~~~~~~~~~~~~~~\n");
+					int size_of_message;
+					create_complete_path(complete_path, path, lecture->d_name);
+					if(isDirectory(complete_path) == 0)
+					{
+						printf("TEST_thread_created\n");
+						create_thread(&args[inc_of_active_thread], type_of_filter, complete_path, filter, &size_of_message, &tids[inc_of_active_thread]);
+						inc_of_active_thread++;
+					}
+					lecture = readdir(rep);
+				}
+				printf("TEST\n");
+				//on condense les info et on envoi au processus Père
+				fd = open(my_fifo, O_RDWR);
+				for(int inc = 0; inc < inc_of_active_thread; inc++)
+				{
+					printf("|%d|%d|\n", inc, inc_of_active_thread);
+					printf("--%s--\n", args[inc].what_to_print);
+					lock();
+					write(fd, args[inc].what_to_print, args[inc].size_of_what_to_print);
+					unlock();
+				}
+				close(fd);
+				exit(0);
+			}
+			else // processus père
+			{
+				printf("TEST_processusPere\n");
+				inc_of_active_processus++;
+				for(int inc = 0; inc < number_of_threads_by_child; inc++)
+				{
+					lecture = readdir(rep);
+					if(!lecture)
+						break;
+				}
+				//wait(NULL);
+			}
+		}
+		if(inc_of_active_processus == number_of_childs_can_be_active && lecture)
+		{
+			printf("TESt_FIN\n");
+			fd = open(my_fifo, O_RDONLY);
+			for(int inc = 0; inc < inc_of_active_processus; inc++)
+			{
+				wait(NULL);
+				
+			}
+			size_of_message = read(fd, message, SIZE_OF_CONTENT_FILE_MAX);
+			close(fd);
+			write(1, message, size_of_message);
+		}
+		//récupération des infos et vidage de process
+	}
+	free(message);
+	free(complete_path);
+
+}
+
+
+
+
+
+
+
+/*
+void handling_print_directory(int type_of_filter, char* path, char* filter, int number_of_threads_by_child, int number_of_childs_can_be_active)
+{
+	t_com_s args[number_of_threads_by_child];
+	int inc_of_active_thread = 0;
+	pthread_t tids[number_of_threads_by_child];
+
+	//int inc_of_active_processus = 0;
+	//pid_t pid[number_of_childs_can_be_active];
+
+	struct dirent *lecture;
+	DIR *rep;
+	rep = opendir(path);
+	char* complete_path = NULL;
+	complete_path = malloc(sizeof(char*)*PATH_SIZE_MAX);
+
+	lecture = readdir(rep);
+	while(lecture)
+	{
+		int size_of_message;
 		*complete_path = '\0';
 		strcat(complete_path, path);
 		strcat(complete_path, "/");
 		strcat(complete_path, lecture->d_name);
-		if(isDirectory(complete_path)) //si on tombe sur un dossier à l'intérieur du dossier
+		if(isDirectory(complete_path) == 0) //si on tombe sur autre chose qu'un dossier (fichier), on s'en occupe
 		{
-			//TODO
-		}
-		else
-		{
-			printf("=====>> %s\n", complete_path);
 			args[inc_of_active_thread].type_of_filter = type_of_filter;
-			args[inc_of_active_thread].path = complete_path;
-			args[inc_of_active_thread].filter = filter;
+			args[inc_of_active_thread].path = malloc(sizeof(char)*PATH_SIZE_MAX);
+			strcpy(args[inc_of_active_thread].path, complete_path);
+			args[inc_of_active_thread].filter = malloc(sizeof(char)*FILTER_SIZE_MAX);
+			strcpy(args[inc_of_active_thread].filter, filter);
 			args[inc_of_active_thread].size_of_what_to_print = &size_of_message;
 			pthread_attr_t attr;
 			pthread_attr_init(&attr);
 			pthread_create(&tids[inc_of_active_thread], &attr, getWhatToPrintInFile, &args[inc_of_active_thread]);
-			//printf("||%s||\n", args[inc_of_active_thread].what_to_print);
 			inc_of_active_thread++;
-			printf("TEST : %d thread actif(%d) / %s\n", inc_of_active_thread, tids[inc_of_active_thread-1], args[inc_of_active_thread - 1].path );
-
-			/*message = getWhatToPrint(type_of_filter, complete_path, filter, &size_of_message);
-			if(message != "\0")
-			{
-				printf("\nfile name : %s\nSTART\n", lecture->d_name);
-				write(1, message, size_of_message);
-				printf("\nEND\n");
-			}*/
 		}
 		if(inc_of_active_thread == number_of_threads_by_child)
 		{
@@ -158,22 +271,24 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				pthread_join(tids[inc], NULL);
 				printf("\nfile name : %s\nSTART\n", args[inc].path);
 				printf("%s\n", args[inc].what_to_print);
-				printf("\nEND\n");
+				printf("END\n");
 			}
 			inc_of_active_thread = 0;
 		}
+		lecture = readdir(rep);
 	}
 	for(int inc = 0; inc < inc_of_active_thread; inc++)
 	{
 		pthread_join(tids[inc], NULL);
-		printf("TEST2 : %d sur %d (%d)\n", inc+1, inc_of_active_thread, tids[inc]);
 		printf("\nfile name : %s\nSTART\n", args[inc].path);
-		printf("~%s~\n", args[inc].what_to_print);
-		printf("\nEND\n");
+		printf("%s\n", args[inc].what_to_print);
+		printf("END\n");
 	}
 	free(complete_path);
 	closedir(rep);
 }
+*/
+
 
 void print_something(int type_of_filter, char* path, char* filter, int number_of_threads_by_child, int number_of_childs_can_be_active)
 {
@@ -185,6 +300,35 @@ void print_something(int type_of_filter, char* path, char* filter, int number_of
 		}
 		else // si c'est un fichier
 		{
+			int fd;
+			char* my_fifo = PATH_OF_COMMUNICATION_FILE_FOR_NAMED_PIPE;
+			mkfifo(my_fifo, 0666);
+			int size_of_message;
+			char* message;
+			message = malloc(sizeof(char)*SIZE_OF_CONTENT_FILE_MAX);
+			pid_t pid = create_process();
+			if(pid == -1)
+				printf("ERROR : FAILLURE WHEN CREATE A PROCESS in print_something() in crawler.c\n");
+			else if(pid == 0) // processus fils
+			{
+				fd = open(my_fifo, O_WRONLY);
+				message = getWhatToPrint(type_of_filter, path, filter, &size_of_message);
+				write(fd, message, size_of_message);
+				close(fd);
+				exit(0);
+			}
+			else // processus père
+			{
+				fd = open(my_fifo, O_RDONLY);
+				wait(NULL);
+				size_of_message = read(fd, message, SIZE_OF_CONTENT_FILE_MAX);
+				close(fd);
+				printf("\nfile name : %s\nSTART\n", path);
+				write(1, message, size_of_message);
+				printf("\nEND\n");
+			}
+
+			/*
 			int fd[2];
 			char* message;
 			message = malloc(sizeof(char)*SIZE_OF_CONTENT_FILE_MAX);
@@ -212,6 +356,7 @@ void print_something(int type_of_filter, char* path, char* filter, int number_of
 				wait(NULL);
 			}
 			free(message);
+			*/
 		}
 		printf("\n");
 	}
@@ -231,6 +376,11 @@ void handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be
 	action = malloc(sizeof(char*)*(PATH_SIZE_MAX/10));
 	file = malloc(sizeof(char*)*(PATH_SIZE_MAX/2));
 	filter = malloc(sizeof(char*)*(PATH_SIZE_MAX/10));
+
+	if(number_of_childs_can_be_active == 0)
+		number_of_childs_can_be_active = 99999;
+	if(number_of_threads_by_child == 0)
+		number_of_threads_by_child = 99999;
 
 	while(have_to_quit == 0)
 	{

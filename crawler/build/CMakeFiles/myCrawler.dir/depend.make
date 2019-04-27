@@ -22,6 +22,8 @@ CMakeFiles/myCrawler.dir/srcs/flag_handling.c.o: ../headers/mutex.h
 CMakeFiles/myCrawler.dir/srcs/flag_handling.c.o: ../headers/sockets.h
 CMakeFiles/myCrawler.dir/srcs/flag_handling.c.o: ../srcs/flag_handling.c
 
+CMakeFiles/myCrawler.dir/srcs/mutex.c.o: ../srcs/mutex.c
+
 CMakeFiles/myCrawler.dir/tests/main.c.o: ../headers/crawler.h
 CMakeFiles/myCrawler.dir/tests/main.c.o: ../headers/files_handling.h
 CMakeFiles/myCrawler.dir/tests/main.c.o: ../headers/flag_handling.h

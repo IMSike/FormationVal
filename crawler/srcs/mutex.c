@@ -1,7 +1,6 @@
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>
-#include "malloc.h"
 
 static pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 

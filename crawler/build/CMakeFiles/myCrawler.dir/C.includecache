@@ -55,6 +55,10 @@ dirent.h
 -
 errno.h
 -
+fcntl.h
+-
+sys/stat.h
+-
 sys/types.h
 -
 sys/time.h
@@ -65,16 +69,6 @@ pthread.h
 -
 crawler.h
 /home/aurelien/project/crawler/srcs/crawler.h
-
-/home/aurelien/project/crawler/srcs/files_handling.c
-dirent.h
--
-stdlib.h
--
-errno.h
--
-limits.h
--
-crawler.h
-/home/aurelien/project/crawler/srcs/crawler.h
+mutex.h
+/home/aurelien/project/crawler/srcs/mutex.h
 

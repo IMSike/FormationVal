@@ -6,12 +6,14 @@ set(	SRCS
 	tests/main.c
 	srcs/crawler.c
 	srcs/files_handling.c
-	srcs/flag_handling.c)
+	srcs/flag_handling.c
+	srcs/mutex.c)
 
 set(	HEADERS
 	headers/crawler.h
 	headers/files_handling.h
-	headers/flag_handling.h)
+	headers/flag_handling.h
+	headers/mutex.h)
 
 set(	GCC_COVERAGE_COMPILE_FLAGS "-W -Wextra -Wall")
 
