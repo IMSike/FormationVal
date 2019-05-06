@@ -114,6 +114,7 @@ void create_complete_path(char* complete_path, char* part_1, char* part_2)
 
 void create_thread(t_com_s *arg, int type_of_filter, char* path, char* filter, int *size_of_message, pthread_t *tid)
 {
+	printf("TEST_create_thread\n");
 	arg->type_of_filter = type_of_filter;
 	arg->path = malloc(sizeof(char)*PATH_SIZE_MAX);
 	strcpy(arg->path, path);
@@ -123,6 +124,7 @@ void create_thread(t_com_s *arg, int type_of_filter, char* path, char* filter, i
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	pthread_create(tid, &attr, getWhatToPrintInFile, arg);
+	printf("test_fin-create_thread\n");
 }
 
 
@@ -180,10 +182,11 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				for(int inc = 0; inc < inc_of_active_thread; inc++)
 				{
 					printf("|%d|%d|\n", inc, inc_of_active_thread);
+					pthread_join(tids[inc], NULL);
 					printf("--%s--\n", args[inc].what_to_print);
-					lock();
+
 					write(fd, args[inc].what_to_print, args[inc].size_of_what_to_print);
-					unlock();
+
 				}
 				close(fd);
 				exit(0);
@@ -201,19 +204,37 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				//wait(NULL);
 			}
 		}
-		if(inc_of_active_processus == number_of_childs_can_be_active && lecture)
-		{
+		//if(inc_of_active_processus == number_of_childs_can_be_active && lecture)
+		//{
 			printf("TESt_FIN\n");
-			fd = open(my_fifo, O_RDONLY);
+			fd = open(my_fifo, O_RDWR);
 			for(int inc = 0; inc < inc_of_active_processus; inc++)
 			{
+				printf("TEST_for\n");
 				wait(NULL);
-				
+				printf("TEST_for2\n");
 			}
+
+			lock();
+			printf("TEST!\n");
 			size_of_message = read(fd, message, SIZE_OF_CONTENT_FILE_MAX);
+			printf("TEST!\n");
+			unlock();
 			close(fd);
+			printf("TEST!\n");
 			write(1, message, size_of_message);
-		}
+			printf("TESt_FIN2\n");
+
+			inc_of_active_processus = 0;
+			lecture = readdir(rep);
+		//}
+		/*else
+			for(int inc = 0; inc < inc_of_active_processus; inc++)
+			{
+				printf("TES_for\n");
+				wait(NULL);
+				printf("TES_for2\n");
+			}*/
 		//récupération des infos et vidage de process
 	}
 	free(message);

@@ -34,10 +34,7 @@ int isNumeric(char* str)
 	{
 		int inc = 0;
 		while(str[inc] != '\0' && ok > 0)
-		{
-			printf("---%d\n", isdigit(str[inc]));
 			ok = isdigit(str[inc++]);
-		}
 	}
 	return (ok > 1)? 1 : 0;
 }
@@ -52,6 +49,7 @@ void handling_flag(int argc, char *argv[])
 		switch (check_is_flag(argv[inc]))
 		{
 		case -1 :	//flag non reconu
+			printf("%s\n", argv[inc]);
 			printf("\nERROR : FLAG ISN'T RECOGNIZED IN handling_flag() IN flag_handling.c\n");
 			break;
 		case 0 	:	//flag -h
