@@ -106,12 +106,9 @@ void* getWhatToPrintInFile(void* arg)
     infomations->what_to_print = text_to_return;
   }
   else // si l'utilisateur n'utilise pas de filtre on renvoi le texte du fichier
-  {
-    printf("???\n");
     infomations->what_to_print = fileToString(infomations->path, infomations->size_of_what_to_print);
-    printf("??\n");
-  }
-  printf("||||||||%s\n", infomations->what_to_print);
+  //printf("||||||||%s\n", infomations->what_to_print);
+  printf("TEST_fin_fct_thread\n");
   pthread_exit(0);
 }
 

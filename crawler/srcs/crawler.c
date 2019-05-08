@@ -27,9 +27,10 @@ pid_t create_process(void)
 
 void remove_returnLine(char* chaine)
 {
-	for(int i = 0; chaine[i] != '\0'; i++)
-		if(chaine[i] == '\n')
-			chaine[i] = '\0';
+	if(chaine != NULL)
+		for(int i = 0; chaine[i] != '\0'; i++)
+			if(chaine[i] == '\n')
+				chaine[i] = '\0';
 }
 
 //prend la chaine command et la décompose suivant le contenu. renvoi le type de filtre à utiliser (0 = pas de filtre, 1 = filtre -o, 2 = filtre -r)
@@ -37,67 +38,68 @@ int read_user_command(char* command, char* action, char* file, char* filter)
 {
 	int type_of_filter = 0;
 	char* p = NULL;
-
-	p = strtok(command, " ");
-	if(p != NULL)
+	if(command != NULL)
 	{
-		strcpy(action, p);
-		p = strtok(NULL, " ");
+		p = strtok(command, " ");
 		if(p != NULL)
 		{
-			strcpy(file, p);
+			strcpy(action, p);
 			p = strtok(NULL, " ");
 			if(p != NULL)
 			{
-				remove_returnLine(p);
-				if(strcmp(p, "-r") == 0)
+				strcpy(file, p);
+				p = strtok(NULL, " ");
+				if(p != NULL)
 				{
-					p = strtok(NULL, " ");
-					if(p != NULL)
+					remove_returnLine(p);
+					if(strcmp(p, "-r") == 0)
 					{
-						strcpy(filter, p);
-						type_of_filter = 2;
-					}
-					else
-						printf("ERROR : YOU USED -r OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
-				}
-				else if(strcmp(p, "-o") == 0)
-				{
-					p = strtok(NULL, " ");
-					if(p != NULL)
-					{
-						strcpy(filter, p);
-						type_of_filter = 1;
 						p = strtok(NULL, " ");
 						if(p != NULL)
 						{
-							remove_returnLine(p);
-							if(strcmp(p, "-r") == 0)
+							strcpy(filter, p);
+							type_of_filter = 2;
+						}
+						else
+							printf("ERROR : YOU USED -r OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
+					}
+					else if(strcmp(p, "-o") == 0)
+					{
+						p = strtok(NULL, " ");
+						if(p != NULL)
+						{
+							strcpy(filter, p);
+							type_of_filter = 1;
+							p = strtok(NULL, " ");
+							if(p != NULL)
 							{
-								p = strtok(NULL, " ");
-								if(p != NULL)
+								remove_returnLine(p);
+								if(strcmp(p, "-r") == 0)
 								{
-									strcpy(filter, p);
-									type_of_filter = 2;
+									p = strtok(NULL, " ");
+									if(p != NULL)
+									{
+										strcpy(filter, p);
+										type_of_filter = 2;
+									}
+									else
+										printf("ERROR : YOU USED -r OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
 								}
 								else
-									printf("ERROR : YOU USED -r OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
+									printf("ERROR : OPTION NOT RECOGNIZED in read_user_command() in crawler.c\n");
 							}
-							else
-								printf("ERROR : OPTION NOT RECOGNIZED in read_user_command() in crawler.c\n");
 						}
+						else
+							printf("ERROR : YOU USED -o OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
 					}
 					else
-						printf("ERROR : YOU USED -o OPTION WITHOUT CONTENT in read_user_command() in crawler.c\n");
+						printf("ERROR : OPTION NOT RECOGNIZED in read_user_command() in crawler.c\n");
 				}
-				else
-					printf("ERROR : OPTION NOT RECOGNIZED in read_user_command() in crawler.c\n");
 			}
 		}
+		else
+			printf("ERROR : NO USER COMMAND IN ENTRY in read_user_command() in crawler.c\n");
 	}
-	else
-		printf("ERROR : NO USER COMMAND IN ENTRY in read_user_command() in crawler.c\n");
-
 	remove_returnLine(action);
 	remove_returnLine(file);
 	remove_returnLine(filter);
@@ -131,8 +133,15 @@ void create_thread(t_com_s *arg, int type_of_filter, char* path, char* filter, i
 void handling_print_directory(int type_of_filter, char* path, char* filter, int number_of_threads_by_child, int number_of_childs_can_be_active)
 {
 	int fd;
+	fd_set *set = malloc(sizeof(fd_set)*100);
+	struct timeval tv;
+	FD_ZERO(set);
+	FD_SET(fd, set);
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+
 	char* my_fifo = PATH_OF_COMMUNICATION_FILE_FOR_NAMED_PIPE;
-	mkfifo(my_fifo, 0666);
+	char* name_of_pipe = malloc(sizeof(char)*PATH_SIZE_MAX);
 
 	t_com_s args[number_of_threads_by_child];
 	pthread_t tids[number_of_threads_by_child];
@@ -162,7 +171,12 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				printf("ERROR : FAILLURE WHEN CREATE A PROCESS in handling_print_directory() in crawler.c\n");
 			else if(pid[inc_of_active_processus] == 0) // processus fils
 			{
+				int retval;
+
 				int inc_of_active_thread = 0;
+				sprintf(name_of_pipe, "%s%d", my_fifo, inc_of_active_processus);
+				printf("+%s++\n", name_of_pipe);
+				mkfifo(name_of_pipe, 0666);
 				while(inc_of_active_thread < number_of_threads_by_child && lecture) //tant qu'on est en dessous de la limite de threads
 				{
 					printf("TEST_while_thread~~~~~~~~~~~~~~~~~~~~~~~\n");
@@ -178,17 +192,35 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				}
 				printf("TEST\n");
 				//on condense les info et on envoi au processus Père
-				fd = open(my_fifo, O_RDWR);
+				//FD_ZERO(set);
+				//FD_SET(fd, set);
+				/*retval = select(fd+1, NULL, set, NULL ,&tv);
+				printf("\n\n%s\n\n", retval);
+				if (retval == -1)
+					printf("ERROR : select() in handling_print_directory() in crawler.c\n");
+				else if (retval)
+				{
+					printf("test\n");
+				        fd = open(name_of_pipe, O_WRONLY);
+				}
+				else
+					printf("ERROR : CAN'T WRITE IN FD in handling_print_directory() in crawler.c\n");
+*/
+				fd = open(name_of_pipe, O_WRONLY);
+				printf("TEST2\n");
 				for(int inc = 0; inc < inc_of_active_thread; inc++)
 				{
-					printf("|%d|%d|\n", inc, inc_of_active_thread);
+					//printf("|%d|%d|\n", inc, inc_of_active_thread);
 					pthread_join(tids[inc], NULL);
-					printf("--%s--\n", args[inc].what_to_print);
-
-					write(fd, args[inc].what_to_print, args[inc].size_of_what_to_print);
-
+					//printf("--%s--\n", args[inc].what_to_print);
+					lock();
+					printf("TEST_for_thread\n");
+					printf("--%s!\n", args[inc].what_to_print);
+					write(fd, args[inc].what_to_print, (*args[inc].size_of_what_to_print));
+					unlock();
 				}
 				close(fd);
+				printf("TEST_fin_thread\n");
 				exit(0);
 			}
 			else // processus père
@@ -206,18 +238,32 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 		}
 		//if(inc_of_active_processus == number_of_childs_can_be_active && lecture)
 		//{
-			printf("TESt_FIN\n");
-			fd = open(my_fifo, O_RDWR);
-			for(int inc = 0; inc < inc_of_active_processus; inc++)
-			{
-				printf("TEST_for\n");
-				wait(NULL);
-				printf("TEST_for2\n");
-			}
+			
+		for(int inc = 0; inc < inc_of_active_processus; inc++)
+		{
+			printf("TEST_for : %d|%d\n", inc, inc_of_active_processus);
+			wait(NULL);
+			printf("TEST_for2\n");
+		}
+		for(int inc = 0; inc < inc_of_active_processus; inc++)
+		{
+			sprintf(name_of_pipe, "%s%d", my_fifo, inc);
+			printf("+%s+\n", name_of_pipe);
+			fd = open(name_of_pipe, O_RDONLY|O_NONBLOCK);
 
 			lock();
 			printf("TEST!\n");
-			size_of_message = read(fd, message, SIZE_OF_CONTENT_FILE_MAX);
+
+			int retval;
+			retval = select(fd+1, set, NULL, NULL ,&tv);
+			if (retval == -1)
+				printf("ERROR : select() in handling_print_directory() in crawler.c\n");
+			else if (retval)
+			        size_of_message = read(fd, message, SIZE_OF_CONTENT_FILE_MAX);
+			else
+				printf("ERROR : CAN'T READ FD in handling_print_directory() in crawler.c\n");
+
+			
 			printf("TEST!\n");
 			unlock();
 			close(fd);
@@ -227,6 +273,7 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 
 			inc_of_active_processus = 0;
 			lecture = readdir(rep);
+		}
 		//}
 		/*else
 			for(int inc = 0; inc < inc_of_active_processus; inc++)
@@ -239,7 +286,7 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 	}
 	free(message);
 	free(complete_path);
-
+	free(name_of_pipe);
 }
 
 
