@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <pthread.h>
 #include "crawler.h"
 
 char  *allocateCharPtr(int wordSize)
@@ -11,6 +12,7 @@ char  *allocateCharPtr(int wordSize)
     return ptr;
   else
     perror("\n ERROR in allocateCharPtr ");
+  return NULL;
 }
 
 /* Fonction qui récupère le nombre de caractères contenu le fichier */
@@ -28,11 +30,13 @@ int getCharFilesNumbers(char *filePath)
      else
       perror("\n ERROR in getCharFilesNumber 2 ");
     }
+    fclose(file);
     return counter;
   }
   else
     perror("\n ERROR in getCharFilesNumber 1 ");
   fclose(file);
+  return -1;
 }
 
 /* Fonction pour mettre en mémoire un fichier */
@@ -50,11 +54,13 @@ char *fileToString(char *filePath, int *bufferLength)
       buffer[offset] = c;
       offset++;
     }
+    fclose(file);
     return buffer;
   }
   else
     perror("\n ERROR in fileToString ");
   fclose(file);
+  return NULL;
 }
 
 //renvoi le nombre d'occurence du caractère car dans chaine
@@ -110,6 +116,7 @@ void* getWhatToPrintInFile(void* arg)
   //printf("||||||||%s\n", infomations->what_to_print);
   printf("TEST_fin_fct_thread\n");
   pthread_exit(0);
+  return NULL;
 }
 
 

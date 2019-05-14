@@ -171,7 +171,7 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 				printf("ERROR : FAILLURE WHEN CREATE A PROCESS in handling_print_directory() in crawler.c\n");
 			else if(pid[inc_of_active_processus] == 0) // processus fils
 			{
-				int retval;
+				//int retval;
 
 				int inc_of_active_thread = 0;
 				sprintf(name_of_pipe, "%s%d", my_fifo, inc_of_active_processus);
