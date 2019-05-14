@@ -15,7 +15,7 @@ set(	HEADERS
 	headers/flag_handling.h
 	headers/mutex.h)
 
-set(	GCC_COVERAGE_COMPILE_FLAGS "-W -Wextra -Wall")
+set(	GCC_COVERAGE_COMPILE_FLAGS "-W -Wextra -Wall -g3")
 
 add_library( myCrawler SHARED ${SRCS} ${HEADERS})
 add_executable(my_crawler tests/main.c)

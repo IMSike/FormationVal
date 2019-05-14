@@ -45,7 +45,9 @@ char *fileToString(char *filePath, int *bufferLength)
   FILE *file = fopen( filePath,"r" );
   if( file != NULL && bufferLength != NULL)
   {
+    fclose(file);
     *bufferLength = getCharFilesNumbers(filePath);
+    FILE *file = fopen( filePath,"r" );
     char *buffer = allocateCharPtr(*bufferLength);
     char  c;
     int   offset = 0;

@@ -434,10 +434,11 @@ void print_something(int type_of_filter, char* path, char* filter, int number_of
 
 void handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be_active)
 {
-	char* action = NULL;
-	char* file = NULL;
-	char* filter = NULL;
-	char input[PATH_SIZE_MAX];
+	char *action = NULL;
+	char *file = NULL;
+	char *filter = NULL;
+	char *input = malloc(sizeof(char)*PATH_SIZE_MAX);
+	//char input[PATH_SIZE_MAX];
 	int type_of_filter = 0; // 0 = pas de filtre, 1 = filtre -o, 2 = filtre -r
 	int have_to_quit = 0;
 
@@ -453,7 +454,7 @@ void handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be
 	while(have_to_quit == 0)
 	{
 		printf("PLEASE ENTER A COMMAND ('help' to know more, 'quit' to exit) >> \n");
-		read(0, &input, PATH_SIZE_MAX);
+		read(0, input, PATH_SIZE_MAX);
 		type_of_filter = read_user_command(input, action, file, filter);
 
 		if(strcmp(action, "help") == 0) //affichage de l'aide
@@ -466,4 +467,5 @@ void handling_inputs(int number_of_threads_by_child, int number_of_childs_can_be
 	free(action);
 	free(file);
 	free(filter);
+	free(input);
 }
