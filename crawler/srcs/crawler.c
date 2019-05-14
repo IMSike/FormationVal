@@ -249,7 +249,7 @@ void handling_print_directory(int type_of_filter, char* path, char* filter, int 
 		{
 			sprintf(name_of_pipe, "%s%d", my_fifo, inc);
 			printf("+%s+\n", name_of_pipe);
-			fd = open(name_of_pipe, O_RDONLY|O_NONBLOCK);
+			fd = open(name_of_pipe, O_RDONLY);
 
 			lock();
 			printf("TEST!\n");

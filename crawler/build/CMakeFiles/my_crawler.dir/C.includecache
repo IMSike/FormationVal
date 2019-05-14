@@ -55,4 +55,12 @@ sys/time.h
 -
 crawler.h
 /home/aurelien/project/crawler/tests/crawler.h
+string.h
+-
+fcntl.h
+-
+sys/stat.h
+-
+sys/types.h
+-
 
